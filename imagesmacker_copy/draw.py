@@ -10,7 +10,7 @@ from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
 from qrcode.main import QRCode
 
-from imagesmacker.fonts import font_size_fn, ttf
+from imagesmacker.fonts import font_loader, font_size_fn
 from imagesmacker.utils import xywh2xyxy_text, xyxy2xywh_text
 
 RecursiveDict = dict[str, Union[str, list["RecursiveDict"], "RecursiveDict"]]
@@ -185,7 +185,7 @@ class Draw:
         text_kwargs = {
             "anchor": slas,
             "fill": kwargs.pop("fill"),
-            "font": ttf(font=font, size=max_font_size),  # type: ignore[arg-type, misc]
+            "font": font_loader(font=font, size=max_font_size),  # type: ignore[arg-type, misc]
             **kwargs,
         }
 

@@ -1,0 +1,16 @@
+{
+    "python.defaultInterpreterPath": ".venv/bin/python",
+    "autoDocstring.customTemplatePath": "dev/autodoc.mustache",
+    "files.exclude": {
+        // false
+        "**/.git*": false,
+        // true
+        "**/__pycache__": true,
+        "**/*.egg-info/": true,
+        ".history": true,
+        "node_modules": true,
+        "venv": true,
+        "pyenv": true,
+        // "out": true
+    },
+}

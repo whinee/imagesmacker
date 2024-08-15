@@ -2,7 +2,7 @@
 
 [[package]]
 name = "alltheutils"
-version = "0.0.0"
+version = "1.0.0"
 description = "None"
 optional = false
 python-versions = ">=3.10,<4"
@@ -16,7 +16,7 @@ pyyaml = "^6.0"
 type = "git"
 url = "https://github.com/klikasnap/AllTheUtils.git"
 reference = "HEAD"
-resolved_reference = "1c901efd86b78a196d04ce2e6b5c3aca25ca4097"
+resolved_reference = "54e19b9a7fde46680359cfd0da66ad21ee010c02"
 
 [[package]]
 name = "annotated-types"

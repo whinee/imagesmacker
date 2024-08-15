@@ -1,18 +1,15 @@
-import os
 from textwrap import wrap
-from typing import Any, Optional, Union
+from typing import Any, Union
 
-from alltheutils.cfg import rcfg
-from alltheutils.types import Kwargs
-from alltheutils.utils import dnrp
 from PIL import Image, ImageDraw
 from qrcode.image.styledpil import StyledPilImage
 from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
 from qrcode.main import QRCode
 
-from imagesmacker.fonts import font_size_fn, ttf
-from imagesmacker.models.draw import TextConfig
-from imagesmacker.utils import xywh2xyxy_text, xyxy2xywh_text
+from imagesmacker.fonts import FontSizeCalculator, font_loader
+from imagesmacker.models.coordinates import RectangleCoordinates
+from imagesmacker.models.draw import TextAnchor, TextConfig
+from imagesmacker.models.fields import FieldAttributes
 
 RecursiveDict = dict[str, Union[str, list["RecursiveDict"], "RecursiveDict"]]
 
@@ -30,189 +27,12 @@ def qr(data: str, box_size: int = 20, border: int = 1, **kwargs) -> StyledPilIma
     )
 
 
-class DrawOld:
-    def __init__(self, img: Image.Image) -> None:
-        self.img = img
-        self.draw = ImageDraw.Draw(img)
-
-    def text(
-        self,
-        coords: tuple[str, int, int, int, int],
-        text_config: TextConfig,
-        **kwargs: Any,
-    ) -> None:
-
-        xa: str
-        ya: str
-        mlva_ls: list[str]
-
-        text = str(text).strip()
-        coords_type, *coords = type_coords_tuple
-        xa, ya, *mlva_ls = anchor  # type: ignore[misc] # multi line vertical anchor list
-        slas: str = xa + ya  # type: ignore[misc] # single line anchor set
-
-        if len(mlva_ls) > 1:
-            raise Exception(
-                "Anchor for multiline text should not exceed three characters.",
-            )
-
-        if coords_type == "xyxy":
-            # left-most x-coordinate, highest y-coordinate, right-most x-coordinate, lowest y-coordinate
-            x1, y1, x2, y2 = coords
-            # field starting x-coordinate, field starting y-coordinate, field width, field height
-            fx, fy, fw, fh = xyxy2xywh_text(slas, x1, y1, x2, y2)
-        elif coords_type == "xywh":
-            fx, fy, fw, fh = coords
-            x1, y1, x2, y2 = xywh2xyxy_text(slas, fx, fy, fw, fh)
-
-        tfs = font_size_fn(
-            self.draw,
-            font,
-            (fx, fy),
-        )  # true font size # type: ignore[arg-type]
-
-        text_sls: str | list[str] = text  # text: string or list
-
-        max_font_size = int(max_font_size)
-
-        if ("\n" in text) or breaktext:
-            if len(mlva_ls) == 0:
-                mlva = "m"
-            else:
-                mlva = mlva_ls[0]
-            while True:
-                tw = 0
-                tw_ls = []
-                th_ls = []
-
-                tt = text.splitlines()
-                for i in tt:
-                    tw += tfs(max_font_size, i)[0]
-                ml = max(len(i) for i in tt)
-                cpfw = round(fw / (tfs(max_font_size, text)[0] / ml))
-
-                tt = [j for i in tt for j in wrap(i, cpfw)]
-                ltt = len(tt)
-
-                for i in tt:
-                    twi, thi = tfs(max_font_size, i)
-                    tw_ls.append(twi)
-                    th_ls.append(thi)
-
-                tw = max(tw_ls)
-                th = round(ltt * line_height * (sum(th_ls) / ltt))
-                if (tw > fw) or (th > fh):
-                    max_font_size -= 1
-                else:
-                    text_sls = tt
-                    break
-        else:
-            if len(mlva_ls) > 0:
-                raise Exception(
-                    "Anchor for single line text should not exceed two characters.",
-                )
-            tw, th = tfs(max_font_size, text)
-            if (tw > fw) or (th > fh):
-                while True:
-                    max_font_size -= 1
-                    tw, th = tfs(max_font_size, text)
-                    if (tw <= fw) and (th <= fh):
-                        break
-
-        if inverted:
-            hth = round(th / 2)  # halved text height
-            lhth = th - hth  # large half of the text height
-            fh += th
-            it = Image.new("RGBA", (fw, fh), color=(0, 0, 0, 0))
-            itd = ImageDraw.Draw(it)
-
-            match xa:
-                case "l":
-                    slas = "r" + ya
-                    fx = fw
-                case "m":
-                    fx = round(fw / 2)
-                case "r":
-                    slas = "l" + ya
-                    fx = 0
-
-            match ya:
-                case "a":
-                    fy = fh - th - lhth
-                case "m":
-                    fy: int = round(fh / 2)  # type: ignore[no-redef]
-                case "d":
-                    fy = th + lhth
-        else:
-            itd = self.draw
-
-        text_kwargs = {
-            "anchor": slas,
-            "fill": kwargs.pop("fill"),
-            "font": ttf(font=font, size=max_font_size),  # type: ignore[arg-type, misc]
-            **kwargs,
-        }
-
-        if isinstance(text_sls, list):
-            tholtt = th / ltt
-
-            match mlva:
-                case "a":
-                    vertical_additive: float = fh - th if inverted else y1
-                case "m":
-                    vertical_additive = (
-                        (fh - th) / 2 if inverted else y1 + ((fh - th) / 2)
-                    )
-                case "d":
-                    vertical_additive = 0 if inverted else y1 + fh - th
-
-            for t, ty in zip(
-                text_sls,
-                range(round(tholtt / 2), th, round(tholtt)),
-                strict=True,
-            ):
-                itd.text(text=t, xy=(fx, vertical_additive + ty), **text_kwargs)
-        else:
-            itd.text(text=text_sls, xy=(fx, fy), **text_kwargs)
-
-        if inverted:
-            it = it.rotate(180)
-            self.img.paste(it, (x1, y1 - lhth, x2, y2 + hth), it)
-
-    def qr(
-        self,
-        type_coords_tuple: tuple[str, int, int, int, int],
-        data: str,
-        **kwargs: Kwargs,
-    ) -> None:
-        coords_type, *coords = type_coords_tuple
-        if coords_type == "xyxy":
-            # left-most x-coordinate, highest y-coordinate, right-most x-coordinate, lowest y-coordinate
-            x1, y1, x2, y2 = coords
-        elif coords_type == "xywh":
-            fx, fy, fw, fh = coords
-            x1, y1, x2, y2 = xywh2xyxy_text("mm", fx, fy, fw, fh)
-
-        w = x2 - x1
-        h = y2 - y1
-
-        if w > h:
-            x1 = x2 - h
-            x2 = x1 + h
-            w = h
-        else:
-            y1 = y2 - w
-            y2 = y1 + w
-            h = w
-
-        coords = [x1, y1, x2, y2]
-
-        self.img.paste(
-            qr(data, **kwargs).resize((w, h), Image.Resampling.LANCZOS),
-            coords,
-        )
-
 class Draw:
+    """
+    An abstraction of `ImageDraw.Draw` specifically for drawing multiline text
+    and QR codes in images.
+    """
+
     def __init__(self, image: Image.Image) -> None:
         self.image = image
         self.draw = ImageDraw.Draw(image)
@@ -220,6 +40,215 @@ class Draw:
     def text(
         self,
         text: str,
-        text_arguments: TextConfig,
+        field_coords: RectangleCoordinates,
+        field_attributes: FieldAttributes,
     ) -> None:
-        self.draw.text(text=text, xy=(fx, fy), **text_kwargs)
+        """
+        This method will try to fit the text within the field.
+
+        Args:
+        - text (`str`): Text to be drawn
+        - field_coords (`RectangleCoordinates`): _description_
+        - field_attributes (`FieldAttributes`): _description_
+        """
+
+        # Initialize variables
+        draw_text_common_kwargs: dict[str, Any] = {}
+
+        text_config = field_attributes.text_config
+
+        font_size = text_config.font_size
+        anchor = text_config.anchor
+
+        fsc = FontSizeCalculator(self.draw, text_config.font_filepath)
+
+        # x1, field_y, x2, y2 = field_coords.xyxy()
+        field_x, field_y, field_width, field_height = field_coords.xywh()
+
+        # Fit the text in the given field
+        print(fsc.get_text_bbox(font_size, text))
+
+        # If the text is multiline or is allowed to be broken into multiple lines, then
+        # we try to break it into multiple lines so that it can fit into the field
+        if ("\n" in text) or text_config.break_text:
+            font_size, text_lines_list, text_height = self.break_text(
+                text,
+                text_config,
+                font_size,
+                fsc,
+                field_width,
+                field_height,
+            )
+        else:
+            while True:
+                text_width, text_height = fsc.get_text_bbox(font_size, text)
+                # If `text_width` is greater than `field_width` or if `text_height` is
+                # greater than `field_height`, then the `font_size` will be decremented
+                # by 1, and the loop will continue until the condition is no longer
+                # satisfied.
+                if (text_width > field_width) or (text_height > field_height):
+                    font_size -= 1
+                else:
+                    break
+
+        anchor, draw, field_x, field_y = self.inverted_draw(
+            text_config, anchor, field_x, field_y, field_width, field_height, text_height
+        )
+
+        # print(text_lines_list)
+
+        draw_text_common_kwargs["font"] = font_loader(
+            text_config.font_filepath,
+            font_size,
+        )
+        draw_text_common_kwargs["anchor"] = anchor
+
+        if ("\n" in text) or text_config.break_text:
+            # text_height over length of text_lines_list
+            tholtlt = text_height / len(text_lines_list)
+
+            match anchor[1]:
+                case "t":
+                    vertical_additive: float = (
+                        field_height - text_height if text_config.inverted else field_y
+                    )
+                case "m":
+                    vertical_additive = (
+                        (field_height - text_height) / 2
+                        if text_config.inverted
+                        else field_y + ((field_height - text_height) / 2)
+                    )
+                case "b":
+                    vertical_additive = (
+                        0
+                        if text_config.inverted
+                        else field_y + field_height - text_height
+                    )
+
+            text_x = field_coords.text_coordinates(anchor=anchor)[0]
+            draw_text_common_kwargs["anchor"] = anchor[0] + "m"
+
+            for t, ty in zip(
+                text_lines_list,
+                range(round(tholtlt / 2), text_height, round(tholtlt)),
+                strict=True,
+            ):
+                text_width, text_height = fsc.get_text_bbox(text)
+                draw.text(
+                    text=t,
+                    xy=(text_x, vertical_additive + ty),
+                    **draw_text_common_kwargs,
+                )
+        else:
+            draw.text(
+                text=text,
+                xy=field_coords.text_coordinates(anchor=anchor),  # type: ignore
+                **draw_text_common_kwargs,
+            )
+
+    def break_text(
+        self,
+        text: str,
+        text_config: TextConfig,
+        font_size: int,
+        fsc: FontSizeCalculator,
+        field_width: int,
+        field_height: int,
+    ) -> tuple[int, list[str], int]:
+        while True:
+            # Initialize variables
+            text_width = 0
+            text_line_width_list = []
+            text_line_height_list = []
+
+            text_lines_list = text.splitlines()  # tlt
+            # Count the number of characters in the longest line of the multiline text
+            max_char_length_in_tlt = max(len(i) for i in text_lines_list)
+
+            # We can deduce the number of characters that fit in the field width
+            # by multiplying the field width by `max_char_length_in_tlt`, all over the
+            # width of the text is when drawn on the image.
+            # This uses the fact that `(a/(b/c)) = ((a * c)/b)` to simplify the equation
+            characters_per_field_width = round(
+                field_width
+                * max_char_length_in_tlt
+                / (fsc.get_text_bbox(font_size, text)[0]),
+            )
+
+            # Rewrite the `text_lines_list` to have the longest line of text be
+            # the value of `characters_per_field_width`
+            text_lines_list = [
+                j for i in text_lines_list for j in wrap(i, characters_per_field_width)
+            ]
+            length_tlt = len(text_lines_list)
+
+            # Measure the width and height of each line of text, then appened it
+            # to the intialized lists earlier
+            for text_line in text_lines_list:
+                text_line_width, text_line_height = fsc.get_text_bbox(
+                    font_size,
+                    text_line,
+                )
+                text_line_width_list.append(text_line_width)
+                text_line_height_list.append(text_line_height)
+
+                # set `text_width` to be the width of the widest line of text
+            text_width = max(text_line_width_list)
+
+            text_height = round(
+                length_tlt
+                * text_config.line_height
+                * (sum(text_line_height_list) / length_tlt),
+            )
+
+            # If `text_width` is greater than `field_width` or if `text_height` is
+            # greater than `field_height`, then the `font_size` will be decremented
+            # by 1, and the loop will continue until the condition is no longer
+            # satisfied.
+            if (text_width > field_width) or (text_height > field_height):
+                font_size -= 1
+            else:
+                return (font_size, text_lines_list, text_height)
+
+    def inverted_draw(
+        self,
+        text_config: TextConfig,
+        anchor: TextAnchor,
+        field_x: int,
+        field_y: int,
+        field_width: int,
+        field_height: int,
+        text_height: int,
+    ) -> tuple[TextAnchor, ImageDraw.Draw, int, int]:
+        if text_config.inverted:
+            hth = round(text_height / 2)  # halved text height
+            lhth = text_height - hth  # large half of the text height
+            field_height += text_height
+            inverted_text_image = Image.new(
+                "RGBA", (field_width, field_height), color=(0, 0, 0, 0),
+            )
+            draw = ImageDraw.Draw(inverted_text_image)
+
+            horizontal_anchor, vertical_anchor = anchor
+
+            match horizontal_anchor:
+                case "l":
+                    anchor = "r" + vertical_anchor # type: ignore
+                    field_x = field_height
+                case "m":
+                    field_x = round(field_height / 2)
+                case "r":
+                    anchor = "l" + vertical_anchor # type: ignore
+                    field_x = 0
+
+            match vertical_anchor:
+                case "a":
+                    field_y = field_height - text_height - lhth
+                case "m":
+                    field_y = round(field_height / 2)
+                case "d":
+                    field_y = text_height + lhth
+        else:
+            draw = self.draw
+
+        return anchor, draw, field_x, field_y

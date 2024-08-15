@@ -4,13 +4,16 @@
 
 
 # from imagesmacker.draw import Draw
-from imagesmacker.models.coordinates import XYXY, Coordinates
-from imagesmacker.models.fields import Fields, FieldsCoords, RelativeDataFieldFormat
+from imagesmacker.models.coordinates import XYXY, RectangleCoordinates
+from imagesmacker.models.fields import (
+    FieldsCoords,
+    RelativeDataFieldFormat,
+)
 
 
 def relative_field_formatting(
     data_field_format: RelativeDataFieldFormat,
-    dimensions: Coordinates,
+    dimensions: RectangleCoordinates,
 ) -> FieldsCoords:
     """
     _summary_.
@@ -72,6 +75,7 @@ def relative_field_formatting(
         field_y += row_height
 
     return output
+
 
 # def draw_field(
 #     draw: Draw,

@@ -1,16 +1,20 @@
-from typing import Literal
+from typing import Literal, TypeAlias
 
 from pydantic import BaseModel
+
+TextAnchor: TypeAlias = Literal["lt", "mt", "rt", "lm", "mm", "rm", "lb", "mb", "rb"]
 
 
 class TextStyle(BaseModel):
     italics: bool = False
 
+
 class TextConfig(BaseModel):
-    font: str
-    anchor: Literal['la', 'ma', 'ra', 'lm', 'mm', 'rm', 'ld', 'md', 'rd'] = "mm"
-    multiline_vertical_anchor: Literal['a', 'm', 'd'] = 'm'
-    font_size: float | int = 100
+    font_filepath: str
+    font_size: int = 100
+    # minimum_font_size: int = 20
+    anchor: TextAnchor = "mm"
+    # multiline_vertical_anchor: Literal["t", "m", "b"] = "m"
     break_text: bool = False
     line_height: float | int = 1
     inverted: bool = False
