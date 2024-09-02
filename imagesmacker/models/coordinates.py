@@ -2,7 +2,7 @@ import abc
 from collections.abc import Iterator
 from typing import NamedTuple, cast
 
-from imagesmacker.models.draw import TextAnchor
+from imagesmacker.models.draw import TextAnchor, validate_text_anchor
 
 
 class XYXYNamedTuple(NamedTuple):
@@ -50,10 +50,11 @@ class RectangleCoordinates(metaclass=abc.ABCMeta):
         Returns:
         `tuple[int, int]`: _description_
         """
+        validate_text_anchor(anchor)
         x1, y1, x2, y2 = self.xyxy()
-        x_anchor, y_anchor = anchor  # type: ignore
+        horizontal_anchor, vertical_anchor = anchor  # type: ignore
 
-        match x_anchor:
+        match horizontal_anchor:
             case "l":
                 x = x1
             case "m":
@@ -61,7 +62,7 @@ class RectangleCoordinates(metaclass=abc.ABCMeta):
             case "r":
                 x = x2
 
-        match y_anchor:
+        match vertical_anchor:
             case "t":
                 y = y1
             case "m":

@@ -13,13 +13,26 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "handbook/text-anchors.md",
+                "file": "developer ramblings/whats wrong right now.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "b17fe5d5884167e4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "handbook/drawing-text.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -69,7 +82,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 322.5
   },
   "right": {
     "id": "a3f45f8aaa7f7388",
@@ -85,7 +98,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "handbook/text-anchors.md",
+                "file": "handbook/drawing-text.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +115,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "handbook/text-anchors.md",
+                "file": "handbook/drawing-text.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +138,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "handbook/text-anchors.md"
+                "file": "handbook/drawing-text.md"
               }
             }
           }
@@ -146,16 +159,30 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "f6340350249b33d1",
+  "active": "b17fe5d5884167e4",
   "lastOpenFiles": [
-    "examples/fit-1.png",
-    "examples/multiline-1.png",
-    "handbook/text.md",
+    "dev/bump.md",
+    "dev",
+    "developer ramblings/whats wrong right now.md",
+    "handbook/drawing-text.md",
+    "examples/text-anchors-multiline.png",
+    "examples/text-anchors-inverted-multiline.png",
+    "examples/text-anchors.png",
+    "examples/single-line-mm.png",
+    "examples/multiline-mm.png",
+    "examples/inverted-single-line-mm.png",
     "handbook/text-anchors.md",
+    "developer ramblings/TODO.md",
+    "developer ramblings/draw-text-shenanigans.md",
+    "handbook/data-field-format.md",
     "handbook/coordinates.md",
     "handbook/document.md",
-    "handbook/data-field-format.md",
-    "examples/text-anchors.png",
-    "handbook/usage.md"
+    "README.md",
+    "Untitled.md",
+    "developer ramblings",
+    "handbook/usage.md",
+    "examples/fit-mm.png",
+    "examples/fit-1.png",
+    "examples/multiline-1.png"
   ]
 }

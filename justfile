@@ -2,19 +2,25 @@
 
 # Choose recipes
 default:
-    @ just -lu; printf '%s ' press Enter to continue; read; just --choose
+    @ just -l
 
 [private]
 black:
-    @ python -m black -q imagesmacker; python -m black -q test; exit 0
+    @ python -m black -q examples > /dev/null 2>&1
+    @ python -m black -q imagesmacker > /dev/null 2>&1
+    @ python -m black -q test > /dev/null 2>&1
 
 [private]
 nio:
-    @ python -m no_implicit_optional imagesmacker; python -m no_implicit_optional test; exit 0
+    @ python -m no_implicit_optional examples
+    @ python -m no_implicit_optional imagesmacker
+    @ python -m no_implicit_optional test
 
 [private]
 ruff:
-    @ python -m ruff check --fix imagesmacker; python -m ruff check --fix test; exit 0
+    @ python -m ruff check --fix --exit-zero examples
+    @ python -m ruff check --fix --exit-zero imagesmacker
+    @ python -m ruff check --fix --exit-zero test
 
 # Set up development environment
 [unix]

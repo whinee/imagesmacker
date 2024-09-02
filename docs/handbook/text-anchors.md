@@ -8,6 +8,7 @@ The `anchor` parameter determines the alignment of drawn text relative to the fi
 An anchor is specified with a two-character string. The first character is the horizontal alignment, the second character is the vertical alignment. For example, the default value of `mm` for means middle-middle aligned text.
 
 When drawing text with `imagesmacker.draw.Draw.text()` with a specific anchor, the text will be placed such that the specified anchor point is at the `xy` coordinates.
+
 ## Horizontal anchor alignment
 
 `l` ― left
@@ -36,4 +37,10 @@ Below is an example of text anchors and how they behave in their fields.
 
 ![](../examples/text-anchors.png)
 
-%% Vertical anchor is same for multi line anchor %%
+Below is an example of text anchors on a multiline text.
+
+![](../examples/text-anchors-multiline.png)
+
+Below is an example of text anchors on an inverted multiline text.
+
+![](../examples/text-anchors-inverted-multiline.png)

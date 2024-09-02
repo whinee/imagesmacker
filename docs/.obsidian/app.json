@@ -2,5 +2,7 @@
   "showInlineTitle": false,
   "trashOption": "system",
   "useMarkdownLinks": true,
-  "alwaysUpdateLinks": true
+  "alwaysUpdateLinks": true,
+  "vimMode": false,
+  "spellcheck": false
 }
