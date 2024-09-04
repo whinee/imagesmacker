@@ -1,4 +1,4 @@
-from typing import Literal, TypeAlias
+from typing import Any, Literal, Optional, TypeAlias
 
 from pydantic import BaseModel
 
@@ -12,18 +12,30 @@ class TextStyle(BaseModel):
 class TextConfig(BaseModel):
     font_filepath: str
     font_size: int = 100
-    # minimum_font_size: int = 20
     anchor: TextAnchor = "mm"
-    # multiline_vertical_anchor: Literal["t", "m", "b"] = "m"
     break_text: bool = False
     line_height: float | int = 1.2
     inverted: bool = False
     style: TextStyle = TextStyle()
 
 
+class BarcodeConfig(BaseModel):
+    pass
+
+
+class Code128Config(BarcodeConfig):
+    options: Optional[dict[str, Any]] = None
+
+
+class QRCodeConfig(BarcodeConfig):
+    box_size: int = 20
+    border: int = 1
+
+
 def validate_text_anchor(anchor: str):
     if len(anchor) != 2:
         raise ValueError("The string must be exactly 2 characters long.")
+
     anchor_tuple: tuple[str, str] = tuple(anchor)  # type: ignore
     horizontal_anchor, vertical_anchor = anchor_tuple  # type: ignore[misc]
     if horizontal_anchor not in {"l", "m", "r"}:

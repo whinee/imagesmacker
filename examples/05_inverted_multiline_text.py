@@ -8,7 +8,8 @@ from imagesmacker.models.fields import (
     TextFieldAttributes,
 )
 
-text = """OOOOH I'm Inverted"""
+text = """Address: #19 Lo St., Breezy Hills,
+Brgy. San Roque, Quezon City, Metro Manila"""
 
 image_size = image_width, image_height = (500, 500)
 image = Image.new("RGB", image_size, color="black")
@@ -31,4 +32,4 @@ draw.text(
     field_attributes=field_attributes,
 )
 
-image.save(f"{dnrp(__file__, 2)}/docs/examples/inverted-single-line-mm.png")
+image.save(f"{dnrp(__file__, 2)}/docs/examples/inverted-multiline-mm.png")

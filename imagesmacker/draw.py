@@ -1,36 +1,51 @@
 from textwrap import wrap
-from typing import Any, Union
+from typing import Any, Literal
 
+from barcode import Code128
+from barcode.writer import ImageWriter as BarcodeImageWriter
 from PIL import Image, ImageDraw
-from qrcode.image.styledpil import StyledPilImage
-from qrcode.image.styles.moduledrawers import RoundedModuleDrawer
+from qrcode.image.pil import PilImage
 from qrcode.main import QRCode
 
 from imagesmacker.fonts import FontSizeCalculator, font_loader
 from imagesmacker.models.coordinates import XYXY, RectangleCoordinates
-from imagesmacker.models.draw import TextConfig
-from imagesmacker.models.fields import FieldAttributes
+from imagesmacker.models.draw import Code128Config, QRCodeConfig, TextConfig
+from imagesmacker.models.fields import BarcodeFieldAttributes, TextFieldAttributes
+from imagesmacker.utils import scale_and_center_rect
 
-RecursiveDict = dict[str, Union[str, list["RecursiveDict"], "RecursiveDict"]]
 
+class Barcode:
+    @staticmethod
+    def code128(data: str, code_128_config: Code128Config) -> PilImage:
+        if code_128_config.options is None:
+            code_128_config.options = {
+                "module_width": 0.2,
+                "quiet_zone": 1,
+                "module_height": 10,
+                "text_distance": 2,
+            }
+        barcode_class = Code128(data, writer=BarcodeImageWriter())
 
-def qr(data: str, box_size: int = 20, border: int = 1, **kwargs) -> StyledPilImage:
-    qr = QRCode(
-        border=border,
-        box_size=box_size,
-    )
-    qr.add_data(data)
-    qr.make(fit=True)
-    return qr.make_image(
-        image_factory=StyledPilImage,
-        module_drawer=RoundedModuleDrawer(),
-    )
+        return barcode_class.render(writer_options=code_128_config.options, text="")
+
+    @staticmethod
+    def qr(data: str, qr_code_config: QRCodeConfig) -> PilImage:
+        qr = QRCode(
+            border=qr_code_config.border,
+            box_size=qr_code_config.box_size,
+        )
+        qr.add_data(data)
+        qr.make(fit=True)
+        return qr.make_image(
+            # image_factory=StyledPilImage,
+            # module_drawer=RoundedModuleDrawer(),
+        )
 
 
 class Draw:
     """
     An abstraction of `ImageDraw.Draw` specifically for drawing texts
-    and QR codes in images.
+    and barcodes in images.
     """
 
     def __init__(self, image: Image.Image) -> None:
@@ -41,7 +56,7 @@ class Draw:
         self,
         text: str,
         field_coords: RectangleCoordinates,
-        field_attributes: FieldAttributes,
+        field_attributes: TextFieldAttributes,
     ) -> None:
         """
         This method will try to fit the text within the field.
@@ -98,7 +113,7 @@ class Draw:
             # # Subtract `hth` to the `text_height` to get the larger half of the text
             # # height. This is for pixel accuracy
             # larger_hth = text_height - halved_text_height
-    
+
             # # field_height += text_height
 
             # Create a new image with the same width and height as the field to draw the
@@ -139,7 +154,14 @@ class Draw:
         draw_text_common_kwargs["anchor"] = anchor
 
         # If the text is multiline or is allowed to be broken into multiple lines, then
+        # we do the following:
         if ("\n" in text) or text_config.break_text:
+            # We just approximate where to place the lines of text vertically.
+            # That's why there are overlaps in glyphs when the line height is set at 1.
+            # That's also why line height's default is set at `1.2`.
+            # If we don't approximate this, then we can have non-overlapping glyphs,
+            # but I have a deadline to meet, yknow?
+
             # text_height over length of text_lines_list
             tholtlt = text_height / len(text_lines_list)
 
@@ -163,7 +185,7 @@ class Draw:
                         else field_y + field_height - text_height
                     )
 
-            text_x = field_coords.text_coordinates(anchor=anchor)[0] - field_x # type: ignore
+            text_x = field_coords.text_coordinates(anchor=anchor)[0] - field_x  # type: ignore
             draw_text_common_kwargs["anchor"] = anchor[0] + "m"
 
             for text_line, text_y in zip(
@@ -200,7 +222,7 @@ class Draw:
 
             draw.text(
                 text=text,
-                xy=draw_field_coords.text_coordinates(anchor=anchor), # type: ignore
+                xy=draw_field_coords.text_coordinates(anchor=anchor),  # type: ignore
                 **draw_text_common_kwargs,
             )
 
@@ -274,3 +296,22 @@ class Draw:
                 font_size -= 1
             else:
                 return (font_size, text_lines_list, text_height)
+
+    def barcode(
+        self,
+        data: str,
+        type: Literal["Code128", "QR"],
+        field_coords: RectangleCoordinates,
+        field_attributes: BarcodeFieldAttributes,
+    ) -> None:
+        barcode_config = field_attributes.barcode_config
+
+        barcode = getattr(Barcode, type.lower())(data, barcode_config)
+
+        barcode_coords = scale_and_center_rect(field_coords, barcode.size)
+        barcode_wh = barcode_coords.xywh()[2:4]
+
+        self.image.paste(
+            barcode.resize(barcode_wh, Image.Resampling.LANCZOS),
+            barcode_coords.xyxy(),
+        )

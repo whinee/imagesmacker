@@ -8,12 +8,12 @@ from imagesmacker.fields import relative_field_formatting
 from imagesmacker.models.coordinates import XYWH
 from imagesmacker.models.draw import TextConfig
 from imagesmacker.models.fields import (
-    FieldAttributes,
     FieldsConfig,
     FieldsCoords,
     RelativeDataFieldFormat,
     RelativeFieldCell,
     RelativeRow,
+    TextFieldAttributes,
 )
 
 data_field_fmt_rows = []
@@ -40,10 +40,11 @@ def walk(
     fields_config: FieldsConfig,
 ) -> None:
     for field_name, field_text in fields_text.items():
+        field_attributes: TextFieldAttributes = fields_config[field_name]  # type: ignore
         smack_draw.text(
             text=field_text,
             field_coords=fields_coords[field_name],
-            field_attributes=fields_config[field_name],
+            field_attributes=field_attributes,
         )
 
 
@@ -53,7 +54,7 @@ for y_anchor in vertical_anchors:
         text_anchor = x_anchor + y_anchor
         y_anchor_list.append(RelativeFieldCell(fr=1, name=text_anchor))
         fields_text[text_anchor] = text
-        fields_config[text_anchor] = FieldAttributes(
+        fields_config[text_anchor] = TextFieldAttributes(
             text_config=TextConfig(
                 font_filepath=os.path.join(
                     dnrp(__file__, 2),

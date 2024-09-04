@@ -1,3 +1,0 @@
-- If text is multiline, break it up
-- Shrink down the text so that it can fit in the field
-- 

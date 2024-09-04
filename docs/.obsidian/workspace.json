@@ -13,26 +13,13 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "developer ramblings/whats wrong right now.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "b17fe5d5884167e4",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "handbook/drawing-text.md",
+                "file": "developer ramblings/TODO.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -98,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "handbook/drawing-text.md",
+                "file": "developer ramblings/TODO.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "handbook/drawing-text.md",
+                "file": "developer ramblings/TODO.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "handbook/drawing-text.md"
+                "file": "developer ramblings/TODO.md"
               }
             }
           }
@@ -159,12 +146,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "b17fe5d5884167e4",
+  "active": "f6340350249b33d1",
   "lastOpenFiles": [
+    "developer ramblings/What's Wrong Right Now.md",
     "dev/bump.md",
-    "dev",
-    "developer ramblings/whats wrong right now.md",
+    "developer ramblings/TODO.md",
+    "developer ramblings/draw-text-shenanigans.md",
     "handbook/drawing-text.md",
+    "dev",
     "examples/text-anchors-multiline.png",
     "examples/text-anchors-inverted-multiline.png",
     "examples/text-anchors.png",
@@ -172,8 +161,6 @@
     "examples/multiline-mm.png",
     "examples/inverted-single-line-mm.png",
     "handbook/text-anchors.md",
-    "developer ramblings/TODO.md",
-    "developer ramblings/draw-text-shenanigans.md",
     "handbook/data-field-format.md",
     "handbook/coordinates.md",
     "handbook/document.md",

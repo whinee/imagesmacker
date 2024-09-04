@@ -1,5 +1,3 @@
-import os
-
 from alltheutils.utils import dnrp
 from PIL import Image
 
@@ -7,7 +5,7 @@ from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYWH
 from imagesmacker.models.draw import TextConfig
 from imagesmacker.models.fields import (
-    FieldAttributes,
+    TextFieldAttributes,
 )
 
 text = """Cwoissant OwO"""
@@ -17,12 +15,9 @@ image = Image.new("RGB", image_size, color="black")
 
 draw = Draw(image)
 
-field_attributes = FieldAttributes(
+field_attributes = TextFieldAttributes(
     text_config=TextConfig(
-        font_filepath=os.path.join(
-            dnrp(__file__, 2),
-            "assets/fonts/arial bold.ttf",
-        ),
+        font_filepath=f"{dnrp(__file__, 2)}/assets/fonts/arial bold.ttf",
         font_size=100,
         anchor="mm",
     ),
@@ -34,4 +29,4 @@ draw.text(
     field_attributes=field_attributes,
 )
 
-image.save(os.path.join(dnrp(__file__, 2), "docs/examples/single-line-mm.png"))
+image.save(f"{dnrp(__file__, 2)}/docs/examples/single-line-mm.png")
