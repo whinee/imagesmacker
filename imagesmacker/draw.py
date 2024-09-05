@@ -16,20 +16,30 @@ from imagesmacker.utils import scale_and_center_rect
 
 class Barcode:
     @staticmethod
-    def code128(data: str, code_128_config: Code128Config) -> PilImage:
+    def code128(data: str, code_128_config: Code128Config, field_coords: RectangleCoordinates) -> PilImage:
         if code_128_config.options is None:
             code_128_config.options = {
                 "module_width": 0.2,
+                "module_height": 15,
                 "quiet_zone": 1,
-                "module_height": 10,
                 "text_distance": 2,
             }
         barcode_class = Code128(data, writer=BarcodeImageWriter())
 
+        module_height = code_128_config.options.get("module_height", 15)
+        bc_width, bc_height = barcode_class.render(writer_options=code_128_config.options, text="").size
+        field_width, field_height = field_coords.xywh()[2:4]
+
+        bc_aspect_ratio = bc_height / bc_width
+        field_aspect_ratio = field_height / field_width
+        bc_factor = module_height / bc_aspect_ratio
+
+        code_128_config.options["module_height"] = field_aspect_ratio * bc_factor
+
         return barcode_class.render(writer_options=code_128_config.options, text="")
 
     @staticmethod
-    def qr(data: str, qr_code_config: QRCodeConfig) -> PilImage:
+    def qr(data: str, qr_code_config: QRCodeConfig, field_coords: RectangleCoordinates) -> PilImage:
         qr = QRCode(
             border=qr_code_config.border,
             box_size=qr_code_config.box_size,
@@ -307,7 +317,7 @@ class Draw:
     ) -> None:
         barcode_config = field_attributes.barcode_config
 
-        barcode = getattr(Barcode, type.lower())(data, barcode_config)
+        barcode = getattr(Barcode, type.lower())(data, barcode_config, field_coords)
 
         barcode_coords = scale_and_center_rect(field_coords, barcode.size)
         barcode_wh = barcode_coords.xywh()[2:4]
