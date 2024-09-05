@@ -3,9 +3,9 @@ from PIL import Image
 
 from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYWH
-from imagesmacker.models.draw import TextConfig
+from imagesmacker.models.draw import TextConfig, TextStyle
 from imagesmacker.models.fields import (
-    TextFieldAttributes,
+    TextFieldAttributes
 )
 
 text = """Cwoissant OwO"""
@@ -20,6 +20,7 @@ field_attributes = TextFieldAttributes(
         font_filepath=f"{dnrp(__file__, 2)}/assets/fonts/arial bold.ttf",
         font_size=100,
         anchor="mm",
+        style=TextStyle(fill="#fff"),
     ),
 )
 

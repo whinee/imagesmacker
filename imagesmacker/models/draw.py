@@ -1,15 +1,20 @@
 from typing import Any, Literal, Optional, TypeAlias
 
-from pydantic import BaseModel
+from PIL.ImageDraw import _Ink
+from pydantic import BaseModel, ConfigDict
 
 TextAnchor: TypeAlias = Literal["lt", "mt", "rt", "lm", "mm", "rm", "lb", "mb", "rb"]
 
 
 class TextStyle(BaseModel):
-    italics: bool = False
+    model_config = ConfigDict(extra="forbid")
+    fill: _Ink = "#000"
+    italics: bool = False # not in use
+    underline: bool = False # not in use
 
 
 class TextConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
     font_filepath: str
     font_size: int = 100
     anchor: TextAnchor = "mm"
@@ -24,10 +29,12 @@ class BarcodeConfig(BaseModel):
 
 
 class Code128Config(BarcodeConfig):
+    model_config = ConfigDict(extra="forbid")
     options: Optional[dict[str, Any]] = None
 
 
 class QRCodeConfig(BarcodeConfig):
+    model_config = ConfigDict(extra="forbid")
     box_size: int = 20
     border: int = 1
 

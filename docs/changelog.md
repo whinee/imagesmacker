@@ -1,3 +1,13 @@
+# 2.1.0
+
+## Added
+
+- ability to change the text's color
+
+## Changed
+
+- Extra fields are now forbidden for models in `imagesmacker/models/draw.py` and `imagesmacker/models/fields.py`
+
 # 2.0.0
 
 ## Added

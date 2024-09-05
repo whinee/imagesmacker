@@ -67,13 +67,11 @@ class Draw:
         - field_attributes (`FieldAttributes`): _description_
         """
 
-        # Initialize variables
-        draw_text_common_kwargs: dict[str, Any] = {}
-
         text_config = field_attributes.text_config
 
         font_size = text_config.font_size
         anchor = text_config.anchor
+        text_style = text_config.style
 
         fsc = FontSizeCalculator(self.draw, text_config.font_filepath)
 
@@ -147,11 +145,14 @@ class Draw:
         else:
             draw = self.draw
 
-        draw_text_common_kwargs["font"] = font_loader(
-            text_config.font_filepath,
-            font_size,
-        )
-        draw_text_common_kwargs["anchor"] = anchor
+        draw_text_common_kwargs: dict[str, Any] = {
+            "font": font_loader(
+                text_config.font_filepath,
+                font_size,
+            ),
+            "anchor": anchor,
+            "fill": text_style.fill,
+        }
 
         # If the text is multiline or is allowed to be broken into multiple lines, then
         # we do the following:
@@ -288,7 +289,7 @@ class Draw:
                 * (sum(text_line_height_list) / length_tlt),
             )
 
-            # If `text_width` is greater than `field_width` or if `text_height` is
+            # If `text_width` is greater than `field_width`, or if `text_height` is
             # greater than `field_height`, then the `font_size` will be decremented
             # by 1, and the loop will continue until the condition is no longer
             # satisfied.
