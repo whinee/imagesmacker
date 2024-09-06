@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "imagesmacker"
-version = "2.1.1"
+version = "2.1.2"
 description = ""
 authors = ["whinee"]
 
@@ -42,6 +42,7 @@ disable_error_code = [
     "no-untyped-call",
     "no-untyped-def",
     "type-arg",
+    "unused-ignore",
 ]
 strict = true
 exclude = "dev"

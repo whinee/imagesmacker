@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 from imagesmacker.draw import Draw
 from imagesmacker.fields import relative_field_formatting
 from imagesmacker.models.coordinates import XYWH
-from imagesmacker.models.draw import TextConfig
+from imagesmacker.models.draw import TextConfig, TextStyle
 from imagesmacker.models.fields import (
     FieldsConfig,
     FieldsCoords,
@@ -63,6 +63,7 @@ for y_anchor in vertical_anchors:
                 font_size=50,
                 anchor=text_anchor,  # type: ignore
                 break_text=True,
+                style=TextStyle(fill="#fff"),
             ),
         )
     data_field_fmt_rows.append(RelativeRow(fr=1, cells=y_anchor_list))

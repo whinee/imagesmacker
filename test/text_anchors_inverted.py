@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 from imagesmacker.draw import Draw
 from imagesmacker.fields import relative_field_formatting
 from imagesmacker.models.coordinates import XYWH
-from imagesmacker.models.draw import TextConfig
+from imagesmacker.models.draw import TextConfig, TextStyle
 from imagesmacker.models.fields import (
     FieldsConfig,
     FieldsCoords,
@@ -65,6 +65,7 @@ for y_anchor in vertical_anchors:
                 anchor=text_anchor,  # type: ignore
                 break_text=True,
                 inverted=True,
+                style=TextStyle(fill="#fff"),
             ),
         )
     data_field_fmt_rows.append(RelativeRow(fr=1, cells=y_anchor_list))
@@ -92,6 +93,7 @@ def draw_boxes() -> None:
 draw_boxes()
 image.save(
     os.path.join(
-        dnrp(__file__, 2), "docs/examples/text-anchors-inverted-multiline.png",
+        dnrp(__file__, 2),
+        "docs/examples/text-anchors-inverted-multiline.png",
     ),
 )

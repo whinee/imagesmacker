@@ -16,7 +16,11 @@ from imagesmacker.utils import scale_and_center_rect
 
 class Barcode:
     @staticmethod
-    def code128(data: str, code_128_config: Code128Config, field_coords: RectangleCoordinates) -> PilImage:
+    def code128(
+        data: str,
+        code_128_config: Code128Config,
+        field_coords: RectangleCoordinates,
+    ) -> PilImage:
         if code_128_config.options is None:
             code_128_config.options = {
                 "module_width": 0.2,
@@ -27,7 +31,10 @@ class Barcode:
         barcode_class = Code128(data, writer=BarcodeImageWriter())
 
         module_height = code_128_config.options.get("module_height", 15)
-        bc_width, bc_height = barcode_class.render(writer_options=code_128_config.options, text="").size
+        bc_width, bc_height = barcode_class.render(
+            writer_options=code_128_config.options,
+            text="",
+        ).size
         field_width, field_height = field_coords.xywh()[2:4]
 
         bc_aspect_ratio = bc_height / bc_width
@@ -39,7 +46,11 @@ class Barcode:
         return barcode_class.render(writer_options=code_128_config.options, text="")
 
     @staticmethod
-    def qr(data: str, qr_code_config: QRCodeConfig, field_coords: RectangleCoordinates) -> PilImage:
+    def qr(
+        data: str,
+        qr_code_config: QRCodeConfig,
+        field_coords: RectangleCoordinates,
+    ) -> PilImage:
         qr = QRCode(
             border=qr_code_config.border,
             box_size=qr_code_config.box_size,
@@ -196,7 +207,11 @@ class Draw:
                         else field_y + field_height - text_height
                     )
 
-            text_x = field_coords.text_coordinates(anchor=anchor)[0] - field_x  # type: ignore
+            text_x = field_coords.text_coordinates(anchor=anchor)[0] # type: ignore
+
+            if text_config.inverted:
+                text_x =- field_x
+
             draw_text_common_kwargs["anchor"] = anchor[0] + "m"
 
             for text_line, text_y in zip(
@@ -211,7 +226,7 @@ class Draw:
                     **draw_text_common_kwargs,
                 )
 
-                # WARNING: remove in production
+                # # WARNING: remove in production
                 # text_width, text_height = fsc.get_text_bbox(font_size, text_line)
                 # rect_coordinates = (
                 #     text_xy[0] - (text_width / 2),
@@ -224,6 +239,13 @@ class Draw:
                 #     outline="white",
                 #     width=1,
                 # )
+
+            # # WARNING: remove in production
+            # self.draw.rectangle(
+            #     field_coords.xyxy(),
+            #     outline="red",
+            #     width=1,
+            # )
         else:
             draw_field_coords: RectangleCoordinates
             if text_config.inverted:

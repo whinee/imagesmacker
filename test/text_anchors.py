@@ -2,12 +2,11 @@ import os
 
 from alltheutils.utils import dnrp
 from PIL import Image, ImageDraw
-from rich.pretty import pprint
 
 from imagesmacker.draw import Draw
 from imagesmacker.fields import relative_field_formatting
 from imagesmacker.models.coordinates import XYWH
-from imagesmacker.models.draw import TextConfig
+from imagesmacker.models.draw import TextConfig, TextStyle
 from imagesmacker.models.fields import (
     FieldsConfig,
     FieldsCoords,
@@ -61,21 +60,22 @@ for y_anchor in vertical_anchors:
                 ),
                 font_size=50,
                 anchor=text_anchor,  # type: ignore
+                style=TextStyle(fill="#fff"),
             ),
         )
     data_field_fmt_rows.append(RelativeRow(fr=1, cells=y_anchor_list))
 
 data_field_fmt = RelativeDataFieldFormat(rows=data_field_fmt_rows)
 
-pprint(data_field_fmt)
-pprint(fields_text)
+# pprint(data_field_fmt)
+# pprint(fields_text)
 
 fields_coords = relative_field_formatting(
     data_field_fmt,
     XYWH(0, 0, image_width, image_height),
 )
 
-pprint(fields_coords)
+# pprint(fields_coords)
 walk(fields_text=fields_text, fields_coords=fields_coords, fields_config=fields_config)
 
 

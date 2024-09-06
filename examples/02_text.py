@@ -4,9 +4,7 @@ from PIL import Image
 from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYWH
 from imagesmacker.models.draw import TextConfig, TextStyle
-from imagesmacker.models.fields import (
-    TextFieldAttributes
-)
+from imagesmacker.models.fields import TextFieldAttributes
 
 text = """Cwoissant OwO"""
 

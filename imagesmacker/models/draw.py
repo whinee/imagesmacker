@@ -9,8 +9,8 @@ TextAnchor: TypeAlias = Literal["lt", "mt", "rt", "lm", "mm", "rm", "lb", "mb", 
 class TextStyle(BaseModel):
     model_config = ConfigDict(extra="forbid")
     fill: _Ink = "#000"
-    italics: bool = False # not in use
-    underline: bool = False # not in use
+    italics: bool = False  # not in use
+    underline: bool = False  # not in use
 
 
 class TextConfig(BaseModel):

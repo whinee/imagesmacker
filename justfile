@@ -34,3 +34,16 @@ lint:
     @ just black
     @ just nio
     @ just ruff
+
+test:
+    python examples/01_coordinates.py
+    python examples/02_text.py
+    python examples/03_multiline_text.py
+    python examples/04_inverted_text.py
+    python examples/05_inverted_multiline_text.py
+    python examples/06_QR_code.py
+    python examples/07_Code128.py
+
+    python test/text_anchors_inverted.py
+    python test/text_anchors_multiline.py
+    python test/text_anchors.py

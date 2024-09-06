@@ -1,3 +1,9 @@
+## 2.1.2
+
+### Fixed
+
+- Multiline text drawing; Broke inverted multiline text drawing instead
+
 ## 2.1.1
 
 ### Changed

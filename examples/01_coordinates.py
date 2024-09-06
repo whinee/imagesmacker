@@ -1,3 +1,4 @@
+from alltheutils.utils import dnrp
 from PIL import Image, ImageDraw
 
 from imagesmacker.models.coordinates import XYXY
@@ -8,4 +9,5 @@ draw = ImageDraw.Draw(image)
 rectangle_coords = XYXY(100, 100, 400, 400)
 
 draw.rectangle(rectangle_coords.list(), fill="purple")
-image.show()
+
+image.save(f"{dnrp(__file__, 2)}/docs/examples/coordinates-test.png")
