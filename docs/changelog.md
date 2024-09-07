@@ -1,3 +1,9 @@
+## 2.1.3
+
+### Fixed
+
+- `alltheutils` dependency is now pinned
+
 ## 2.1.2
 
 ### Fixed
