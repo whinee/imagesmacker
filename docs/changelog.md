@@ -1,3 +1,9 @@
+## 2.1.4
+
+### Fixed
+
+- Bumped `alltheutils` dependency version to `1.0.1`
+
 ## 2.1.3
 
 ### Fixed
