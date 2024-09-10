@@ -7,8 +7,6 @@
 dev/mcaptcha/
 node_modules/
 personal/
-squashfs-root/
-tpl_docs/
 __pycache__/
 **/__pycache__/
 **/tmp/

@@ -1,3 +1,9 @@
+## 2.1.5
+
+### Fixed
+
+- `imagesmacker.draw.Draw.text` and `imagesmacker.draw.Draw.barcode` to not draw `None` or empty strings
+
 ## 2.1.4
 
 ### Fixed

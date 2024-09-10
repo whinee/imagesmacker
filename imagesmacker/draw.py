@@ -88,6 +88,10 @@ class Draw:
         - field_attributes (`FieldAttributes`): _description_
         """
 
+        # If there is no text to draw, return immediately.
+        if (text is None) or (str(text).strip() == ""):
+            return
+
         text_config = field_attributes.text_config
 
         font_size = text_config.font_size
@@ -337,6 +341,10 @@ class Draw:
         field_coords: RectangleCoordinates,
         field_attributes: BarcodeFieldAttributes,
     ) -> None:
+        # If there is no text to draw, return immediately.
+        if (data is None) or (str(data).strip() == ""):
+            return
+
         barcode_config = field_attributes.barcode_config
 
         barcode = getattr(Barcode, type.lower())(data, barcode_config, field_coords)

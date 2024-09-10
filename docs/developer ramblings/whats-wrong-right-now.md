@@ -1,0 +1,2 @@
+- Inverted multiline text drawing is broken
+- validation of XYXY/XYWH coordinates
