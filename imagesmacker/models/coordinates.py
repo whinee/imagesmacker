@@ -93,6 +93,10 @@ class RectangleCoordinates(metaclass=abc.ABCMeta):
 
 class XYXY(RectangleCoordinates):
     def __init__(self, x1: int, y1: int, x2: int, y2: int) -> None:
+        if x1 >= x2:
+            raise ValueError("x2 must be greater than x1.")
+        if y1 >= y2:
+            raise ValueError("y2 must be greater than y1.")
         self.coords = XYXYNamedTuple(x1=x1, y1=y1, x2=x2, y2=y2)
 
     def xyxy(self) -> XYXYNamedTuple:
@@ -112,6 +116,10 @@ class XYXY(RectangleCoordinates):
 
 class XYWH(RectangleCoordinates):
     def __init__(self, x: int, y: int, w: int, h: int) -> None:
+        if not (w > 0):
+            raise ValueError("width must be greater than zero.")
+        if not (h > 0):
+            raise ValueError("height must be greater than zero.")
         self.coords = XYWHNamedTuple(x=x, y=y, w=w, h=h)
 
     def xyxy(self) -> XYXYNamedTuple:

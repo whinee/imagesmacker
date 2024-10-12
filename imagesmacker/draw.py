@@ -4,6 +4,7 @@ from typing import Any, Literal
 from barcode import Code128
 from barcode.writer import ImageWriter as BarcodeImageWriter
 from PIL import Image, ImageDraw
+from qrcode.image.base import BaseImage
 from qrcode.image.pil import PilImage
 from qrcode.main import QRCode
 
@@ -21,16 +22,10 @@ class Barcode:
         code_128_config: Code128Config,
         field_coords: RectangleCoordinates,
     ) -> PilImage:
-        if code_128_config.options is None:
-            code_128_config.options = {
-                "module_width": 0.2,
-                "module_height": 15,
-                "quiet_zone": 1,
-                "text_distance": 2,
-            }
+        options_parameters = ["module_width", "module_height", "quiet_zone", "text_distance"]
+        options = {i: getattr(code_128_config, i) for i in options_parameters}
         barcode_class = Code128(data, writer=BarcodeImageWriter())
 
-        module_height = code_128_config.options.get("module_height", 15)
         bc_width, bc_height = barcode_class.render(
             writer_options=code_128_config.options,
             text="",
@@ -39,18 +34,18 @@ class Barcode:
 
         bc_aspect_ratio = bc_height / bc_width
         field_aspect_ratio = field_height / field_width
-        bc_factor = module_height / bc_aspect_ratio
+        bc_factor = options["module_height"] / bc_aspect_ratio
 
-        code_128_config.options["module_height"] = field_aspect_ratio * bc_factor
+        options["module_height"] = field_aspect_ratio * bc_factor
 
-        return barcode_class.render(writer_options=code_128_config.options, text="")
+        return barcode_class.render(writer_options=options, text="")
 
     @staticmethod
     def qr(
         data: str,
         qr_code_config: QRCodeConfig,
         field_coords: RectangleCoordinates,
-    ) -> PilImage:
+    ) -> BaseImage:
         qr = QRCode(
             border=qr_code_config.border,
             box_size=qr_code_config.box_size,
@@ -58,6 +53,8 @@ class Barcode:
         qr.add_data(data)
         qr.make(fit=True)
         return qr.make_image(
+            back_color=qr_code_config.background_color,
+            fill_color=qr_code_config.foreground_color,
             # image_factory=StyledPilImage,
             # module_drawer=RoundedModuleDrawer(),
         )

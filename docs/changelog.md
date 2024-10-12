@@ -1,3 +1,14 @@
+## 3.0.0
+
+### Added
+
+- Paramaters `error_correction`, `mask_pattern`, `background_color`, and `foreground_color` to `imagesmacker.models.draw.QRCodeConfig`
+- Validation of coordinates in `imagesmacker.models.coordinates.XYXY` and `imagesmacker.models.coordinates.XYWH`
+
+### Changed
+
+- Keys in parameter `options` in `imagesmacker.models.draw.Code128Config` to be top level keys.
+
 ## 2.1.5
 
 ### Fixed

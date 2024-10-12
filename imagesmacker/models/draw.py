@@ -31,12 +31,20 @@ class BarcodeConfig(BaseModel):
 class Code128Config(BarcodeConfig):
     model_config = ConfigDict(extra="forbid")
     options: Optional[dict[str, Any]] = None
+    module_width: float = 0.2
+    module_height: float = 15
+    quiet_zone: int = 1
+    text_distance: int = 2
 
 
 class QRCodeConfig(BarcodeConfig):
     model_config = ConfigDict(extra="forbid")
+    error_correction: int = 0
     box_size: int = 20
     border: int = 1
+    mask_pattern: Optional[int] = None
+    background_color: str | tuple[int, int, int] = "white"
+    foreground_color: str | tuple[int, int, int] = "black"
 
 
 def validate_text_anchor(anchor: str):
