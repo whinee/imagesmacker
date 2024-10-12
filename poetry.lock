@@ -5,18 +5,14 @@ name = "alltheutils"
 version = "1.0.1"
 description = "None"
 optional = false
-python-versions = ">=3.10,<4"
-files = []
-develop = false
+python-versions = "<4,>=3.10"
+files = [
+    {file = "alltheutils-1.0.1-py3-none-any.whl", hash = "sha256:8fefcc8ad140a0d6ebe3843f1b724b9c70bc208b1a6ef68fabe06f91c09bcca8"},
+    {file = "alltheutils-1.0.1.tar.gz", hash = "sha256:7a0d151c4d20b7cbd3bde9f8dc98393fe1e1d54bc2037fb26dce04613ffd2839"},
+]
 
 [package.dependencies]
-pyyaml = "^6.0"
-
-[package.source]
-type = "git"
-url = "https://github.com/whinee/AllTheUtils.git"
-reference = "912bdd52f37e23ce9c4f7181249d10715a4b3e7c"
-resolved_reference = "912bdd52f37e23ce9c4f7181249d10715a4b3e7c"
+pyyaml = ">=6.0,<7.0"
 
 [[package]]
 name = "annotated-types"
@@ -897,4 +893,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.13"
-content-hash = "dcfa77553d23dd2e7720a2eaae2d111d33749a9bc205f64904d25eaa1708d556"
+content-hash = "fa4d1ef87d01c7bef7878cb977a999ef0808164fe3166021b33586e0244eac20"
