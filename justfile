@@ -47,3 +47,10 @@ test:
     python test/text_anchors_inverted.py
     python test/text_anchors_multiline.py
     python test/text_anchors.py
+
+version:
+    @ poetry version
+
+bump +args:
+    @ poetry version {{args}}
+    @ poetry version | awk '{print $2}' > dev/version

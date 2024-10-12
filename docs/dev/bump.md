@@ -12,7 +12,7 @@ Given a version number MAJOR.MINOR.PATCH, increment the:
 
 ## How to Bump
 
-The table below illustrates the effect of the `poetry version` subcommands on the following version strings:
+The table below illustrates the effect of the `just bump` subcommands on the following version strings:
 
 |subcommand|before|after|
 |:---:|:---:|:---:|
