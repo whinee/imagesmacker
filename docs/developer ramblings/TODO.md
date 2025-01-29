@@ -11,3 +11,7 @@ idkkkk
 ## Text Styles 
 
 Italics, bold, that kinda stuff
+
+## Angled Text
+
+Not only text that are written vertically, but also text that are written at an angle.

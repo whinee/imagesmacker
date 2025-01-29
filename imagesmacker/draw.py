@@ -211,7 +211,7 @@ class Draw:
             text_x = field_coords.text_coordinates(anchor=anchor)[0] # type: ignore
 
             if text_config.inverted:
-                text_x =- field_x
+                text_x -= field_x
 
             draw_text_common_kwargs["anchor"] = anchor[0] + "m"
 

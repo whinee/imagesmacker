@@ -1,2 +1,3 @@
-- Inverted multiline text drawing is broken
-- validation of XYXY/XYWH coordinates
+# What's Wrong Right Now
+
+I think there's nothing wrong right now!

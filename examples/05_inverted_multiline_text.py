@@ -29,7 +29,7 @@ field_attributes = TextFieldAttributes(
 
 draw.text(
     text=text,
-    field_coords=XYWH(0, 0, image_width, image_height),
+    field_coords=XYWH(50, 50, image_width - 100, image_height - 100),
     field_attributes=field_attributes,
 )
 

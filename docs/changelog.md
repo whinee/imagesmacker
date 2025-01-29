@@ -1,3 +1,11 @@
+## 3.0.1
+
+I do not think there is anything wrong with the codebasee right now!!!
+
+### Fixed
+
+- `imagesmacker.draw.Draw.text` can now draw inverted multiline text by FUCKING SWAPPING THESE TWO CHARACTERS (`=-` TO `-=`) IN LINE 214 MY GOD 
+
 ## 3.0.0
 
 ### Added
