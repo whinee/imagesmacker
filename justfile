@@ -44,7 +44,7 @@ test:
     python examples/06_QR_code.py
     python examples/07_Code128.py
 
-    python test/text_anchors_inverted.py
+    python test/text_anchors_inverted_multiline.py
     python test/text_anchors_multiline.py
     python test/text_anchors.py
 

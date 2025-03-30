@@ -22,6 +22,7 @@ field_attributes = TextFieldAttributes(
         font_size=50,
         anchor="mm",
         style=TextStyle(fill="#fff"),
+        line_height=1.1,
     ),
 )
 

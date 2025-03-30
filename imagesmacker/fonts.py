@@ -29,7 +29,6 @@ class FontSizeCalculator:
         """
         self.draw = draw
         self.font_path = font_path
-        self.font_cached = font_loader(self.font_path)
 
     def get_text_bbox(self, size: int, text: str) -> tuple[int, int]:
         """
@@ -45,6 +44,6 @@ class FontSizeCalculator:
         x1, y1, x2, y2 = self.draw.multiline_textbbox(
             xy=(0, 0),
             text=text,
-            font=self.font_cached,
+            font=font_loader(self.font_path, size),
         )
         return (x2 - x1, y2 - y1)
