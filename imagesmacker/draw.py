@@ -22,7 +22,12 @@ class Barcode:
         code_128_config: Code128Config,
         field_coords: RectangleCoordinates,
     ) -> PilImage:
-        options_parameters = ["module_width", "module_height", "quiet_zone", "text_distance"]
+        options_parameters = [
+            "module_width",
+            "module_height",
+            "quiet_zone",
+            "text_distance",
+        ]
         options = {i: getattr(code_128_config, i) for i in options_parameters}
         barcode_class = Code128(data, writer=BarcodeImageWriter())
 
@@ -208,7 +213,7 @@ class Draw:
                         else field_y + field_height - text_height
                     )
 
-            text_x = field_coords.text_coordinates(anchor=anchor)[0] # type: ignore
+            text_x = field_coords.text_coordinates(anchor=anchor)[0]  # type: ignore
 
             if text_config.inverted:
                 text_x -= field_x
@@ -345,8 +350,9 @@ class Draw:
         barcode_config = field_attributes.barcode_config
 
         barcode = getattr(Barcode, type.lower())(data, barcode_config, field_coords)
+        size: tuple[int, int] = barcode.size
 
-        barcode_coords = scale_and_center_rect(field_coords, barcode.size)
+        barcode_coords = scale_and_center_rect(field_coords, size)
         barcode_wh = barcode_coords.xywh()[2:4]
 
         self.image.paste(

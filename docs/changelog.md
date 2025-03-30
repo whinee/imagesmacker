@@ -1,10 +1,20 @@
-## 3.0.1
+## 3.0.2
 
-I do not think there is anything wrong with the codebasee right now!!!
+### Added
+
+- Utilities for handling angled text.
 
 ### Fixed
 
-- `imagesmacker.draw.Draw.text` can now draw inverted multiline text by FUCKING SWAPPING THESE TWO CHARACTERS (`=-` TO `-=`) IN LINE 214 MY GOD 
+- Removed useless dependencies.
+
+## 3.0.1
+
+I do not think there is anything wrong with the codebase right now!!!
+
+### Fixed
+
+- `imagesmacker.draw.Draw.text` can now draw inverted multiline text by [FUCKING SWAPPING THESE TWO CHARACTERS (`=-` TO `-=`) IN LINE 214 MY GOD](https://github.com/whinee/imagesmacker/commit/0ea1b655fb59e1e61a0fc488560c867cfe2c3872#diff-cac509c2db6ab9619d324a7954ff1466e312219a0c4a7ee709462a97133b247a)
 
 ## 3.0.0
 

@@ -17,18 +17,19 @@ class FontSizeCalculator:
     def __init__(
         self,
         draw: ImageDraw.ImageDraw,
-        font: str,
+        font_path: str,
     ) -> None:
         """
         Initialize the FontSizeCalculator class.
 
         Args:
         - draw (`ImageDraw.ImageDraw`): The ImageDraw object to use for text measurement.
-        - font (`str`): The font name or path to use.
+        - font_path (`str`): The font path to use.
         - kwargs (`dict[str, Any]`): Additional keyword arguments.
         """
         self.draw = draw
-        self.font = font
+        self.font_path = font_path
+        self.font_cached = font_loader(self.font_path)
 
     def get_text_bbox(self, size: int, text: str) -> tuple[int, int]:
         """
@@ -44,6 +45,6 @@ class FontSizeCalculator:
         x1, y1, x2, y2 = self.draw.multiline_textbbox(
             xy=(0, 0),
             text=text,
-            font=font_loader(self.font, size),
+            font=self.font_cached,
         )
         return (x2 - x1, y2 - y1)

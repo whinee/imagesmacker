@@ -5,6 +5,16 @@ from typing import NamedTuple, cast
 from imagesmacker.models.draw import TextAnchor, validate_text_anchor
 
 
+class XYNamedTuple(NamedTuple):
+    x: int
+    y: int
+
+
+class WHNamedTuple(NamedTuple):
+    w: int
+    h: int
+
+
 class XYXYNamedTuple(NamedTuple):
     x1: int
     y1: int
@@ -17,6 +27,28 @@ class XYWHNamedTuple(NamedTuple):
     y: int
     w: int
     h: int
+
+
+class Coordinates(metaclass=abc.ABCMeta):
+    coords: NamedTuple
+
+    def __iter__(self) -> Iterator[int]:
+        return iter(self.coords)
+
+    def __str__(self) -> str:
+        return str(self.tuple())
+
+    def __repr__(self) -> str:
+        return repr(self.coords)
+
+    def list(self) -> list[int]:
+        return list(self.coords)
+
+    def tuple(self) -> tuple[int, int]:
+        return cast(tuple[int, int], tuple(self.coords))
+
+    def dict(self) -> dict[str, int]:
+        return self.coords._asdict()
 
 
 class RectangleCoordinates(metaclass=abc.ABCMeta):
@@ -91,12 +123,39 @@ class RectangleCoordinates(metaclass=abc.ABCMeta):
         return self.coords._asdict()
 
 
+class XY(Coordinates):
+    def __init__(self, x: int, y: int) -> None:
+        if x < 0:
+            raise ValueError("x must be greater than or equal to zero.")
+        if y < 0:
+            raise ValueError("y must be greater than or equal to zero.")
+        self.coords = XYNamedTuple(x=x, y=y)
+    
+    def xy(self) -> XYNamedTuple:
+        return cast(XYNamedTuple, self.coords)
+
+
+class WH(Coordinates):
+    def __init__(self, w: int, h: int) -> None:
+        if w < 0:
+            raise ValueError("w must be greater than or equal to zero.")
+        if h < 0:
+            raise ValueError("h must be greater than or equal to zero.")
+        self.coords = WHNamedTuple(w=w, h=h)
+
+    def wh(self) -> WHNamedTuple:
+        return cast(WHNamedTuple, self.coords)
+
 class XYXY(RectangleCoordinates):
     def __init__(self, x1: int, y1: int, x2: int, y2: int) -> None:
         if x1 >= x2:
             raise ValueError("x2 must be greater than x1.")
         if y1 >= y2:
             raise ValueError("y2 must be greater than y1.")
+        if x1 < 0:
+            raise ValueError("x1 must be greater than or equal to zero.")
+        if y1 < 0:
+            raise ValueError("y1 must be greater than or equal to zero.")
         self.coords = XYXYNamedTuple(x1=x1, y1=y1, x2=x2, y2=y2)
 
     def xyxy(self) -> XYXYNamedTuple:
@@ -120,6 +179,10 @@ class XYWH(RectangleCoordinates):
             raise ValueError("width must be greater than zero.")
         if not (h > 0):
             raise ValueError("height must be greater than zero.")
+        if x < 0:
+            raise ValueError("x must be greater than or equal to zero.")
+        if y < 0:
+            raise ValueError("y must be greater than or equal to zero.")
         self.coords = XYWHNamedTuple(x=x, y=y, w=w, h=h)
 
     def xyxy(self) -> XYXYNamedTuple:

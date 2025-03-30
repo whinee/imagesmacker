@@ -1,4 +1,4 @@
-from alltheutils.utils import dnrp
+from alltheutils.utils import parent_dir_nth_times
 from PIL import Image
 
 from imagesmacker.draw import Draw
@@ -26,4 +26,4 @@ draw.barcode(
     field_attributes=field_attributes,
 )
 
-image.save(f"{dnrp(__file__, 2)}/docs/examples/QR.png")
+image.save(f"{parent_dir_nth_times(__file__, 2)}/docs/examples/QR.png")

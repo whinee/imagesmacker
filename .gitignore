@@ -30,6 +30,8 @@ yarn-error.log
 **/t[0-9]*.*
 **/test.*
 t
+profile.html
+profile.json
 
 # User-defined Unignored Files
 !example.env

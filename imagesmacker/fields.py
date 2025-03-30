@@ -1,9 +1,3 @@
-# import multiprocessing.dummy as mp
-# import os
-# from typing import Any
-
-
-# from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYXY, RectangleCoordinates
 from imagesmacker.models.fields import (
     FieldsCoords,

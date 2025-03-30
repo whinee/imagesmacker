@@ -1,6 +1,6 @@
 import os
 
-from alltheutils.utils import dnrp
+from alltheutils.utils import parent_dir_nth_times
 from PIL import Image, ImageDraw
 
 from imagesmacker.draw import Draw
@@ -57,7 +57,7 @@ for y_anchor in vertical_anchors:
         fields_config[text_anchor] = TextFieldAttributes(
             text_config=TextConfig(
                 font_filepath=os.path.join(
-                    dnrp(__file__, 2),
+                    parent_dir_nth_times(__file__, 2),
                     "assets/fonts/arial bold.ttf",
                 ),
                 font_size=50,
@@ -89,4 +89,4 @@ def draw_boxes() -> None:
 
 
 draw_boxes()
-image.save(os.path.join(dnrp(__file__, 2), "docs/examples/text-anchors-multiline.png"))
+image.save(os.path.join(parent_dir_nth_times(__file__, 2), "docs/examples/text-anchors-multiline.png"))

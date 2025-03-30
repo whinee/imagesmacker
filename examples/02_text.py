@@ -1,4 +1,4 @@
-from alltheutils.utils import dnrp
+from alltheutils.utils import parent_dir_nth_times
 from PIL import Image
 
 from imagesmacker.draw import Draw
@@ -15,8 +15,8 @@ draw = Draw(image)
 
 field_attributes = TextFieldAttributes(
     text_config=TextConfig(
-        font_filepath=f"{dnrp(__file__, 2)}/assets/fonts/arial bold.ttf",
-        font_size=100,
+        font_filepath=f"{parent_dir_nth_times(__file__, 2)}/assets/fonts/arial bold.ttf",
+        font_size=1000,
         anchor="mm",
         style=TextStyle(fill="#fff"),
     ),
@@ -28,4 +28,4 @@ draw.text(
     field_attributes=field_attributes,
 )
 
-image.save(f"{dnrp(__file__, 2)}/docs/examples/single-line-mm.png")
+image.save(f"{parent_dir_nth_times(__file__, 2)}/docs/examples/single-line-mm.png")

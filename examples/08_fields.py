@@ -16,20 +16,31 @@ from imagesmacker.models.fields import (
     TextFieldAttributes,
 )
 
-data_field_fmt_rows = []
-fields_text = {}
-fields_config = {}
+text = """The quick brown fox jumps over the lazy dog"""
 
 horizontal_anchors = ["l", "m", "r"]
 vertical_anchors = ["t", "m", "b"]
 
-image_size = image_width, image_height = [
-    i * 5 for i in (297, 210)
-]  # landscape A4 size x5
+default_font = os.path.join(
+    parent_dir_nth_times(__file__, 2),
+    "assets/fonts/arial bold.ttf",
+)
+
+image_size = image_width, image_height = [1000, 1000]  # landscape A4 size x5
 image = Image.new("RGB", image_size, color="black")
 
 draw = ImageDraw.Draw(image)
 smack_draw = Draw(image)
+
+default_text_field_attr = TextFieldAttributes(
+    text_config=TextConfig(
+        font_filepath=default_font,
+        font_size=50,
+        anchor="mm",
+        break_text=True,
+        style=TextStyle(fill="#fff"),
+    ),
+)
 
 
 def walk(
@@ -46,36 +57,31 @@ def walk(
         )
 
 
-for y_anchor in vertical_anchors:
-    y_anchor_list = []
-    for x_anchor in horizontal_anchors:
-        text_anchor = x_anchor + y_anchor
-        y_anchor_list.append(RelativeFieldCell(fr=1, name=text_anchor))
-        fields_text[text_anchor] = f"{text_anchor} example"
-        fields_config[text_anchor] = TextFieldAttributes(
-            text_config=TextConfig(
-                font_filepath=os.path.join(
-                    parent_dir_nth_times(__file__, 2),
-                    "assets/fonts/arial bold.ttf",
-                ),
-                font_size=50,
-                anchor=text_anchor,  # type: ignore
-                style=TextStyle(fill="#fff"),
-            ),
-        )
-    data_field_fmt_rows.append(RelativeRow(fr=1, cells=y_anchor_list))
+fields_text = {
+    "A": "A: 1x1",
+    "B": "B: 2x1",
+    "C": "C: 1x2",
+    "D": "D: 2x2",
+}
 
-data_field_fmt = RelativeDataFieldFormat(rows=data_field_fmt_rows)
+data_field_fmt = RelativeDataFieldFormat(rows=[
+    RelativeRow(fr=1, cells=[
+        RelativeFieldCell(fr=1, name="A"),
+        RelativeFieldCell(fr=2, name="B"),
+    ]),
+    RelativeRow(fr=2, cells=[
+        RelativeFieldCell(fr=1, name="C"),
+        RelativeFieldCell(fr=2, name="D"),
+    ]),
+])
 
-# pprint(data_field_fmt)
-# pprint(fields_text)
+fields_config = {key: default_text_field_attr for key in fields_text.keys()}
 
 fields_coords = relative_field_formatting(
     data_field_fmt,
     XYWH(0, 0, image_width, image_height),
 )
 
-# pprint(fields_coords)
 walk(fields_text=fields_text, fields_coords=fields_coords, fields_config=fields_config)
 
 
@@ -90,4 +96,9 @@ def draw_boxes() -> None:
 
 
 draw_boxes()
-image.save(os.path.join(parent_dir_nth_times(__file__, 2), "docs/examples/text-anchors.png"))
+image.save(
+    os.path.join(
+        parent_dir_nth_times(__file__, 2),
+        "docs/examples/fields.png",
+    ),
+)
