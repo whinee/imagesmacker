@@ -32,6 +32,7 @@ yarn-error.log
 t
 profile.html
 profile.json
+demo.html
 
 # User-defined Unignored Files
 !example.env
