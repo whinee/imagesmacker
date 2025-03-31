@@ -1,5 +1,5 @@
-from textwrap import wrap
 import time
+from textwrap import wrap
 from typing import Any, Literal
 
 from barcode import Code128
@@ -120,7 +120,7 @@ class Draw:
         # Else, we just try to fit a single line of text in the field
         else:
             # Time benchmarking
-            timeTaken = time.time()
+            time_taken = time.time()
             # iterations benchmarking
             iterations = 0
             while True:
@@ -137,10 +137,10 @@ class Draw:
                         min_font_size = 1  
                         max_font_size = font_size
 
-                        innerIterations = 0
+                        inner_iterations = 0
                         ## Binary search to find the maximum font size that fits
                         while min_font_size <= max_font_size:
-                            innerIterations += 1
+                            inner_iterations += 1
                             mid_font_size = (min_font_size + max_font_size) // 2
                             text_width, text_height = fsc.get_text_bbox(
                                 mid_font_size,
@@ -155,11 +155,11 @@ class Draw:
                             else:
                                 # If it doesn't fit, try a smaller font size
                                 max_font_size = mid_font_size - 1
-                        print("Inner iterations: ", innerIterations)
+                        print("Inner iterations: ", inner_iterations)
                 else:
                     break
             # Time benchmark and iterations benchmark
-            print("Time taken: ", time.time() - timeTaken)
+            print("Time taken: ", time.time() - time_taken)
             print("Iterations: ", iterations)
             print("Selected font size: ", font_size)
 
