@@ -365,9 +365,6 @@ class Draw:
                 * (sum(text_line_height_list) / length_tlt),
             )
 
-            print(text_width)
-            print(text_height)
-
             # If `text_width` is greater than `field_width`, or if `text_height` is
             # greater than `field_height`, then the `font_size` will be decremented
             # by 1, and the loop will continue until the condition is no longer
