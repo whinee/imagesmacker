@@ -10,6 +10,7 @@ personal/
 __pycache__/
 **/__pycache__/
 **/tmp/
+docs/.obsidian/
 
 # User-defined Ignored Files
 .env.docker-compose
