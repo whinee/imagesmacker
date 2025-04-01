@@ -97,23 +97,24 @@ class Draw:
 
         text_config = field_attributes.text_config
 
-        font_size = text_config.font_size
+        max_font_size = text_config.max_font_size
+        min_font_size = text_config.min_font_size
         anchor = text_config.anchor
         text_style = text_config.style
 
-        fsc = FontSizeCalculator(self.draw, text_config.font_filepath)
+        font_size_calculator = FontSizeCalculator(self.draw, text_config.font_filepath)
 
         field_x1, field_y1, field_x2, field_y2 = field_coords.xyxy()
-        field_x, field_y, field_width, field_height = field_coords.xywh()
+        field_x_coords, field_y, field_width, field_height = field_coords.xywh()
 
         # If the text is multiline or is allowed to be broken into multiple lines, then
         # we try to break it into multiple lines so that it can fit into the field
         if ("\n" in text) or text_config.break_text:
-            font_size, text_lines_list, text_height = self.break_text(
+            max_font_size, text_lines_list, text_height = self.break_text(
                 text=text,
                 text_config=text_config,
-                font_size=font_size,
-                fsc=fsc,
+                font_size=max_font_size,
+                fsc=font_size_calculator,
                 field_width=field_width,
                 field_height=field_height,
             )
@@ -123,45 +124,62 @@ class Draw:
             time_taken = time.time()
             # iterations benchmarking
             iterations = 0
+            # while True:
+            #     iterations += 1
+            #     text_width, text_height = font_size_calculator.get_text_bbox(font_size, text)
+            #     # If `text_width` is greater than `field_width` or if `text_height` is
+            #     # greater than `field_height`, then the `font_size` will be decremented
+            #     # by 1, and the loop will continue until the condition is no longer
+            #     # satisfied.
+            #     if (text_width > field_width) or (text_height > field_height):
+            #         min_font_size = 1  
+            #         max_font_size = font_size
+
+            #         inner_iterations = 0
+            #         ## Binary search to find the maximum font size that fits
+            #         while min_font_size <= max_font_size:
+            #             inner_iterations += 1
+            #             mid_font_size = (min_font_size + max_font_size) // 2
+            #             text_width, text_height = font_size_calculator.get_text_bbox(
+            #                 mid_font_size,
+            #                 text,
+            #             )
+
+            #             # Check if the text fits within the field dimensions
+            #             if text_width <= field_width and text_height <= field_height:
+            #                 # If it fits, try a larger font size
+            #                 font_size = mid_font_size
+            #                 min_font_size = mid_font_size + 1
+            #             else:
+            #                 # If it doesn't fit, try a smaller font size
+            #                 max_font_size = mid_font_size - 1
+            #         print("Inner iterations: ", inner_iterations)
+            #     else:
+            #         break
+
+            previous_max_font_size = max_font_size * 2
             while True:
                 iterations += 1
-                text_width, text_height = fsc.get_text_bbox(font_size, text)
+                text_width, text_height = font_size_calculator.get_text_bbox(max_font_size, text)
+                print(max_font_size, text_width, text_height, text_width >= (field_width * 0.9), text_height >= (field_height * 0.9))
                 # If `text_width` is greater than `field_width` or if `text_height` is
                 # greater than `field_height`, then the `font_size` will be decremented
                 # by 1, and the loop will continue until the condition is no longer
                 # satisfied.
+                
                 if (text_width > field_width) or (text_height > field_height):
-                    if(False):
-                        font_size -= 1
-                    else:
-                        min_font_size = 1  
-                        max_font_size = font_size
-
-                        inner_iterations = 0
-                        ## Binary search to find the maximum font size that fits
-                        while min_font_size <= max_font_size:
-                            inner_iterations += 1
-                            mid_font_size = (min_font_size + max_font_size) // 2
-                            text_width, text_height = fsc.get_text_bbox(
-                                mid_font_size,
-                                text,
-                            )
-
-                            # Check if the text fits within the field dimensions
-                            if text_width <= field_width and text_height <= field_height:
-                                # If it fits, try a larger font size
-                                font_size = mid_font_size
-                                min_font_size = mid_font_size + 1
-                            else:
-                                # If it doesn't fit, try a smaller font size
-                                max_font_size = mid_font_size - 1
-                        print("Inner iterations: ", inner_iterations)
+                    print("condition 1")
+                    previous_max_font_size = max_font_size
+                    max_font_size = max_font_size // 2
+                elif (text_width < (field_width * 0.9)) and (text_height < (field_height * 0.9)):
+                    print("condition 2")
+                    max_font_size = round((previous_max_font_size + max_font_size)/2)
                 else:
                     break
             # Time benchmark and iterations benchmark
             print("Time taken: ", time.time() - time_taken)
             print("Iterations: ", iterations)
-            print("Selected font size: ", font_size)
+            print("Selected font size: ", max_font_size)
 
 
         # If the text needs to be inverted (ie. turned upside down), then, it needs to
@@ -210,7 +228,7 @@ class Draw:
         draw_text_common_kwargs: dict[str, Any] = {
             "font": font_loader(
                 text_config.font_filepath,
-                font_size,
+                max_font_size,
             ),
             "anchor": anchor,
             "fill": text_style.fill,
@@ -226,7 +244,7 @@ class Draw:
             # but I have a deadline to meet, yknow?
 
             # text_height over length of text_lines_list
-            tholtlt = text_height / len(text_lines_list)
+            text_height_over_text_lines_list = text_height / len(text_lines_list)
 
             # there is a `vertical_additive` to place the multiline text exactly where
             # it is aligned to
@@ -248,19 +266,19 @@ class Draw:
                         else field_y + field_height - text_height
                     )
 
-            text_x = field_coords.text_coordinates(anchor=anchor)[0]  # type: ignore
+            text_x_coords = field_coords.text_coordinates(anchor=anchor)[0]  # type: ignore
 
             if text_config.inverted:
-                text_x -= field_x
+                text_x_coords -= field_x_coords
 
             draw_text_common_kwargs["anchor"] = anchor[0] + "m"
 
             for text_line, text_y in zip(
                 text_lines_list,
-                range(round(tholtlt / 2), text_height, round(tholtlt)),
+                range(round(text_height_over_text_lines_list / 2), text_height, round(text_height_over_text_lines_list)),
                 strict=True,
             ):
-                text_xy = (text_x, vertical_additive + text_y)
+                text_xy = (text_x_coords, vertical_additive + text_y)
                 draw.text(
                     text=text_line,
                     xy=text_xy,
@@ -342,8 +360,6 @@ class Draw:
                 j for i in text_lines_list for j in wrap(i, characters_per_field_width)
             ]
             length_tlt = len(text_lines_list)
-
-            
 
             # Measure the width and height of each line of text, then appened it
             # to the intialized lists earlier

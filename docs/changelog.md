@@ -1,3 +1,27 @@
+<h1 align="center" style="font-weight: bold">
+    Changelog
+</h1>
+
+This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.html). This changelog is based on [keepachangelog.com v1.1.0](https://keepachangelog.com/en/1.1.0/).
+
+**Types of Changes**
+
+- `Added` for new features.
+- `Changed` for changes in existing functionality.
+- `Deprecated` for soon-to-be removed features.
+- `Removed` for now removed features.
+- `Fixed` for any bug fixes.
+- `Security` in case of vulnerabilities.
+## 4.0.0 (Unreleased)
+
+### Added
+
+- Added parameter `min_font_size` to `imagesmacker.models.draw.TextConfig`
+- 
+### Changed
+
+- Changed `imagesmacker.models.draw.TextConfig`'s font_size` parameter name to `max_font_size`
+- Changed text fitting algorithm to be binary search-like
 ## 3.0.2
 
 ### Added
@@ -14,14 +38,14 @@ I do not think there is anything wrong with the codebase right now!!!
 
 ### Fixed
 
-- `imagesmacker.draw.Draw.text` can now draw inverted multiline text by [FUCKING SWAPPING THESE TWO CHARACTERS (`=-` TO `-=`) IN LINE 214 MY GOD](https://github.com/whinee/imagesmacker/commit/0ea1b655fb59e1e61a0fc488560c867cfe2c3872#diff-cac509c2db6ab9619d324a7954ff1466e312219a0c4a7ee709462a97133b247a)
+- Fixed `imagesmacker.draw.Draw.text` to now be able to draw inverted multiline text by [FUCKING SWAPPING THESE TWO CHARACTERS (`=-` TO `-=`) IN LINE 214 MY GOD](https://github.com/whinee/imagesmacker/commit/0ea1b655fb59e1e61a0fc488560c867cfe2c3872#diff-cac509c2db6ab9619d324a7954ff1466e312219a0c4a7ee709462a97133b247a)
 
 ## 3.0.0
 
 ### Added
 
-- Paramaters `error_correction`, `mask_pattern`, `background_color`, and `foreground_color` to `imagesmacker.models.draw.QRCodeConfig`
-- Validation of coordinates in `imagesmacker.models.coordinates.XYXY` and `imagesmacker.models.coordinates.XYWH`
+- Added parameters `error_correction`, `mask_pattern`, `background_color`, and `foreground_color` to `imagesmacker.models.draw.QRCodeConfig`.
+- Added validation of coordinates in `imagesmacker.models.coordinates.XYXY` and `imagesmacker.models.coordinates.XYWH`.
 
 ### Changed
 

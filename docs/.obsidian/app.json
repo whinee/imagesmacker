@@ -4,5 +4,6 @@
   "useMarkdownLinks": true,
   "alwaysUpdateLinks": true,
   "vimMode": false,
-  "spellcheck": false
+  "spellcheck": false,
+  "readableLineLength": false
 }

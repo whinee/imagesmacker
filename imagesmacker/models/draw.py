@@ -16,7 +16,8 @@ class TextStyle(BaseModel):
 class TextConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
     font_filepath: str
-    font_size: int = 100
+    min_font_size: int = 1
+    max_font_size: int = 100
     anchor: TextAnchor = "mm"
     break_text: bool = False
     line_height: float | int = 1.2
