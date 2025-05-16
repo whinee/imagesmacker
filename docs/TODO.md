@@ -8,7 +8,8 @@ Items are sorted by priority, with the most important item at the top and least 
 
 ## Important
 
-- [ ] remove `docs/.obsidian`
+Tasks in this section are all completed!
+
 ## Permanent
 
 - [ ] Unit testing for mission critical piece of code
@@ -22,3 +23,5 @@ Items are sorted by priority, with the most important item at the top and least 
 - [ ] Replace `pyyaml` library dependency with `ruamel.yaml`
 
 ## Done
+
+- [ ] remove `docs/.obsidian`

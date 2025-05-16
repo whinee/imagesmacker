@@ -35,7 +35,7 @@ smack_draw = Draw(image)
 default_text_field_attr = TextFieldAttributes(
     text_config=TextConfig(
         font_filepath=default_font,
-        font_size=50,
+        max_font_size=50,
         anchor="mm",
         break_text=True,
         style=TextStyle(fill="#fff"),
@@ -64,16 +64,24 @@ fields_text = {
     "D": "D: 2x2",
 }
 
-data_field_fmt = RelativeDataFieldFormat(rows=[
-    RelativeRow(fr=1, cells=[
-        RelativeFieldCell(fr=1, name="A"),
-        RelativeFieldCell(fr=2, name="B"),
-    ]),
-    RelativeRow(fr=2, cells=[
-        RelativeFieldCell(fr=1, name="C"),
-        RelativeFieldCell(fr=2, name="D"),
-    ]),
-])
+data_field_fmt = RelativeDataFieldFormat(
+    rows=[
+        RelativeRow(
+            fr=1,
+            cells=[
+                RelativeFieldCell(fr=1, name="A"),
+                RelativeFieldCell(fr=2, name="B"),
+            ],
+        ),
+        RelativeRow(
+            fr=2,
+            cells=[
+                RelativeFieldCell(fr=1, name="C"),
+                RelativeFieldCell(fr=2, name="D"),
+            ],
+        ),
+    ],
+)
 
 fields_config = {key: default_text_field_attr for key in fields_text.keys()}
 

@@ -19,10 +19,15 @@ field_attributes = BarcodeFieldAttributes(
     barcode_config=Code128Config(),
 )
 
+margin = 25
+margin_x2 = margin * 2
+
 draw.barcode(
     data=data,
     type="Code128",
-    field_coords=XYWH(50, 50, image_width - 100, image_height - 100),
+    field_coords=XYWH(
+        margin, margin, image_width - margin_x2, image_height - margin_x2,
+    ),
     field_attributes=field_attributes,
 )
 

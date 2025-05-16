@@ -61,7 +61,7 @@ for y_anchor in vertical_anchors:
                     parent_dir_nth_times(__file__, 2),
                     "assets/fonts/arial bold.ttf",
                 ),
-                font_size=50,
+                max_font_size=50,
                 anchor=text_anchor,  # type: ignore
                 break_text=True,
                 inverted=True,

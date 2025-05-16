@@ -18,6 +18,7 @@ def scale_and_center_rect(
 ) -> XYXY:
     pass
 
+
 @overload
 def scale_and_center_rect(
     br_coords: RectangleCoordinates,
@@ -66,12 +67,11 @@ def scale_and_center_rect(
     # Define the original rectangle corners (centered at origin)
     corners = [
         (-scaled_w // 2, -scaled_h // 2),
-        ( scaled_w // 2, -scaled_h // 2),
-        ( scaled_w // 2,  scaled_h // 2),
-        (-scaled_w // 2,  scaled_h // 2),
+        (scaled_w // 2, -scaled_h // 2),
+        (scaled_w // 2, scaled_h // 2),
+        (-scaled_w // 2, scaled_h // 2),
     ]
 
-    
     # If there's no rotation argument...
     if angle is None:
         # ...just center the rectangle...
@@ -81,7 +81,7 @@ def scale_and_center_rect(
         new_y2 = new_y1 + scaled_h
 
         return XYXY(new_x1, new_y1, new_x2, new_y2)
-    
+
     # ...else, apply the rotation matrix
     rotated_corners = []
     # Convert angle to radians
@@ -97,6 +97,6 @@ def scale_and_center_rect(
         # Round the final coordinates to the specified precision
         rotated_corners.append(XY(int(round(x_final, 0)), int(round(y_final, 0))))
 
-    rotated_corners_tuple: tuple[XY, XY, XY, XY] = tuple(rotated_corners) # type: ignore[assignment]
+    rotated_corners_tuple: tuple[XY, XY, XY, XY] = tuple(rotated_corners)  # type: ignore[assignment]
 
     return rotated_corners_tuple, WH(scaled_w, scaled_h)

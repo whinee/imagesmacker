@@ -98,7 +98,6 @@ class Draw:
         text_config = field_attributes.text_config
 
         max_font_size = text_config.max_font_size
-        min_font_size = text_config.min_font_size
         anchor = text_config.anchor
         text_style = text_config.style
 
@@ -132,7 +131,7 @@ class Draw:
             #     # by 1, and the loop will continue until the condition is no longer
             #     # satisfied.
             #     if (text_width > field_width) or (text_height > field_height):
-            #         min_font_size = 1  
+            #         min_font_size = 1
             #         max_font_size = font_size
 
             #         inner_iterations = 0
@@ -157,30 +156,36 @@ class Draw:
             #     else:
             #         break
 
-            previous_max_font_size = max_font_size * 2
             while True:
                 iterations += 1
-                text_width, text_height = font_size_calculator.get_text_bbox(max_font_size, text)
-                print(max_font_size, text_width, text_height, text_width >= (field_width * 0.9), text_height >= (field_height * 0.9))
-                # If `text_width` is greater than `field_width` or if `text_height` is
-                # greater than `field_height`, then the `font_size` will be decremented
-                # by 1, and the loop will continue until the condition is no longer
-                # satisfied.
-                
+                text_width, text_height = font_size_calculator.get_text_bbox(
+                    max_font_size, text,
+                )
+
                 if (text_width > field_width) or (text_height > field_height):
-                    print("condition 1")
-                    previous_max_font_size = max_font_size
                     max_font_size = max_font_size // 2
-                elif (text_width < (field_width * 0.9)) and (text_height < (field_height * 0.9)):
-                    print("condition 2")
-                    max_font_size = round((previous_max_font_size + max_font_size)/2)
+                elif (field_width > text_width > (field_width * 0.9)) or (
+                    field_height > text_height > (field_height * 0.9)
+                ):
+                    break
+                else:
+                    max_font_size = round(max_font_size * 1.5)
+
+            while True:
+                iterations += 1
+                if (text_width < field_width) and (text_height < field_height):
+                    max_font_size = max_font_size + 1
                 else:
                     break
+
+                text_width, text_height = font_size_calculator.get_text_bbox(
+                    max_font_size, text,
+                )
+
             # Time benchmark and iterations benchmark
             print("Time taken: ", time.time() - time_taken)
             print("Iterations: ", iterations)
             print("Selected font size: ", max_font_size)
-
 
         # If the text needs to be inverted (ie. turned upside down), then, it needs to
         # undergo the following steps:
@@ -232,7 +237,7 @@ class Draw:
             ),
             "anchor": anchor,
             "fill": text_style.fill,
-        }   
+        }
 
         # If the text is multiline or is allowed to be broken into multiple lines, then
         # we do the following:
@@ -275,7 +280,11 @@ class Draw:
 
             for text_line, text_y in zip(
                 text_lines_list,
-                range(round(text_height_over_text_lines_list / 2), text_height, round(text_height_over_text_lines_list)),
+                range(
+                    round(text_height_over_text_lines_list / 2),
+                    text_height,
+                    round(text_height_over_text_lines_list),
+                ),
                 strict=True,
             ):
                 text_xy = (text_x_coords, vertical_additive + text_y)

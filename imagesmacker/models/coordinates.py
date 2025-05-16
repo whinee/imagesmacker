@@ -130,7 +130,7 @@ class XY(Coordinates):
         if y < 0:
             raise ValueError("y must be greater than or equal to zero.")
         self.coords = XYNamedTuple(x=x, y=y)
-    
+
     def xy(self) -> XYNamedTuple:
         return cast(XYNamedTuple, self.coords)
 
@@ -145,6 +145,7 @@ class WH(Coordinates):
 
     def wh(self) -> WHNamedTuple:
         return cast(WHNamedTuple, self.coords)
+
 
 class XYXY(RectangleCoordinates):
     def __init__(self, x1: int, y1: int, x2: int, y2: int) -> None:

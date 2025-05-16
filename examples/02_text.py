@@ -16,15 +16,20 @@ draw = Draw(image)
 field_attributes = TextFieldAttributes(
     text_config=TextConfig(
         font_filepath=f"{parent_dir_nth_times(__file__, 2)}/assets/fonts/arial bold.ttf",
-        max_font_size=2,
+        max_font_size=1,
         anchor="mm",
         style=TextStyle(fill="#fff"),
     ),
 )
 
+margin = 25
+margin_x2 = margin * 2
+
 draw.text(
     text=text,
-    field_coords=XYWH(0, 0, image_width, image_height),
+    field_coords=XYWH(
+        margin, margin, image_width - margin_x2, image_height - margin_x2,
+    ),
     field_attributes=field_attributes,
 )
 

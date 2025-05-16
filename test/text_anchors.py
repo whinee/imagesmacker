@@ -58,7 +58,7 @@ for y_anchor in vertical_anchors:
                     parent_dir_nth_times(__file__, 2),
                     "assets/fonts/arial bold.ttf",
                 ),
-                font_size=50,
+                max_font_size=50,
                 anchor=text_anchor,  # type: ignore
                 style=TextStyle(fill="#fff"),
             ),
@@ -90,4 +90,6 @@ def draw_boxes() -> None:
 
 
 draw_boxes()
-image.save(os.path.join(parent_dir_nth_times(__file__, 2), "docs/examples/text-anchors.png"))
+image.save(
+    os.path.join(parent_dir_nth_times(__file__, 2), "docs/examples/text-anchors.png"),
+)
