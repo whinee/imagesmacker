@@ -1,4 +1,3 @@
-import time
 from textwrap import wrap
 from typing import Any, Literal
 
@@ -119,45 +118,7 @@ class Draw:
             )
         # Else, we just try to fit a single line of text in the field
         else:
-            # Time benchmarking
-            time_taken = time.time()
-            # iterations benchmarking
-            iterations = 0
-            # while True:
-            #     iterations += 1
-            #     text_width, text_height = font_size_calculator.get_text_bbox(font_size, text)
-            #     # If `text_width` is greater than `field_width` or if `text_height` is
-            #     # greater than `field_height`, then the `font_size` will be decremented
-            #     # by 1, and the loop will continue until the condition is no longer
-            #     # satisfied.
-            #     if (text_width > field_width) or (text_height > field_height):
-            #         min_font_size = 1
-            #         max_font_size = font_size
-
-            #         inner_iterations = 0
-            #         ## Binary search to find the maximum font size that fits
-            #         while min_font_size <= max_font_size:
-            #             inner_iterations += 1
-            #             mid_font_size = (min_font_size + max_font_size) // 2
-            #             text_width, text_height = font_size_calculator.get_text_bbox(
-            #                 mid_font_size,
-            #                 text,
-            #             )
-
-            #             # Check if the text fits within the field dimensions
-            #             if text_width <= field_width and text_height <= field_height:
-            #                 # If it fits, try a larger font size
-            #                 font_size = mid_font_size
-            #                 min_font_size = mid_font_size + 1
-            #             else:
-            #                 # If it doesn't fit, try a smaller font size
-            #                 max_font_size = mid_font_size - 1
-            #         print("Inner iterations: ", inner_iterations)
-            #     else:
-            #         break
-
             while True:
-                iterations += 1
                 text_width, text_height = font_size_calculator.get_text_bbox(
                     max_font_size, text,
                 )
@@ -172,7 +133,6 @@ class Draw:
                     max_font_size = round(max_font_size * 1.5)
 
             while True:
-                iterations += 1
                 if (text_width < field_width) and (text_height < field_height):
                     max_font_size = max_font_size + 1
                 else:
@@ -181,11 +141,6 @@ class Draw:
                 text_width, text_height = font_size_calculator.get_text_bbox(
                     max_font_size, text,
                 )
-
-            # Time benchmark and iterations benchmark
-            print("Time taken: ", time.time() - time_taken)
-            print("Iterations: ", iterations)
-            print("Selected font size: ", max_font_size)
 
         # If the text needs to be inverted (ie. turned upside down), then, it needs to
         # undergo the following steps:

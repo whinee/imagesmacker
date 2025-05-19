@@ -16,6 +16,8 @@ Tasks in this section are all completed!
 
 ## Temporary
 
+- [ ] Font loader thru fc-cache and whatnot
+- [ ] Visual regression testing
 - [ ] `imagesmacker.models` Models strict validation thru pydantic 
 - [ ] Use [typeguard](https://typeguard.readthedocs.io/en/stable/userguide.html) to type check function arguments and return values in runtime
 - [ ] Migrate from `poetry` to `uv`
@@ -25,3 +27,23 @@ Tasks in this section are all completed!
 ## Done
 
 - [ ] remove `docs/.obsidian`
+
+## Ideas
+
+### Squish Text
+
+squish down text horizontally when the text is too long
+
+squish factor parameter, like how much u squeeze the text before u decrement the font size down
+
+and a minimum font size parameter, like how much you can decrement before the drawer just give up
+
+idkkkk
+
+### Text Styles 
+
+Italics, bold, that kinda stuff
+
+### Angled Text
+
+Not only text that are written vertically, but also text that are written at an angle.

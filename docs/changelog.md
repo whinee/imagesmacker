@@ -12,16 +12,18 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 - `Removed` for now removed features.
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
+
 ## 4.0.0 (Unreleased)
 
 ### Added
 
 - Added parameter `min_font_size` to `imagesmacker.models.draw.TextConfig`
-- 
+
 ### Changed
 
+- Optimized text fitting algorithm to be binary search-like
 - Changed `imagesmacker.models.draw.TextConfig`'s font_size` parameter name to `max_font_size`
-- Changed text fitting algorithm to be binary search-like
+
 ## 3.0.2
 
 ### Added
