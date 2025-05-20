@@ -8,7 +8,10 @@ Items are sorted by priority, with the most important item at the top and least 
 
 ## Important
 
-Tasks in this section are all completed!
+<!-- Tasks in this section are all completed! -->
+- [ ] Bruh I forgot, i should implement this thing:
+    - max font size should actually be the max font size, not going up that limit
+    - min font size should actually be the min font size, not going down that limit
 
 ## Permanent
 
