@@ -1,4 +1,4 @@
-# imagesmacker
+# Imagesmacker
 
 https://whinee.github.io/imagesmacker
 
