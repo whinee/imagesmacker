@@ -18,11 +18,13 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 ### Added
 
 - Added parameter `min_font_size` to `imagesmacker.models.draw.TextConfig`
+- Added parameter `direction` to models `imagesmacker.models.fields.RelativeRow` (now named `imagesmacker.models.fields.RelativeContainer`) and `imagesmacker.models.fields.RelativeDataFieldFormat`
 
 ### Changed
 
 - Optimized text fitting algorithm to be binary search-like
-- Changed `imagesmacker.models.draw.TextConfig`'s font_size` parameter name to `max_font_size`
+- Changed `imagesmacker.models.draw.TextConfig`'s `font_size` parameter name to `max_font_size`
+- Renamed `imagesmacker.models.fields.RelativeRow` to `imagesmacker.models.fields.RelativeContainer`
 
 ## 3.0.2
 

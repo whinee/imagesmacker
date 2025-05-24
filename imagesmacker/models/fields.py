@@ -1,9 +1,13 @@
-from typing import TypeAlias
+from collections.abc import Sequence
+from typing import Literal, TypeAlias
 
 from pydantic import BaseModel, ConfigDict
 
 from imagesmacker.models.coordinates import XYXY
 from imagesmacker.models.draw import BarcodeConfig, TextConfig
+
+cells_type = Sequence["RelativeContainer" | "RelativeFieldCell"]
+directions_type = Literal["lr", "rl", "tb", "bt"]
 
 
 class RelativeFieldCell(BaseModel):
@@ -12,19 +16,21 @@ class RelativeFieldCell(BaseModel):
     name: str
 
 
-class RelativeRow(BaseModel):
+class RelativeContainer(BaseModel):
     model_config = ConfigDict(extra="forbid")
     fr: float
-    cells: list[RelativeFieldCell]
+    cells: cells_type
+    direction: str | directions_type = "tb"
 
 
 class RelativeDataFieldFormat(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    rows: list[RelativeRow]
+    cells: cells_type
+    direction: str | directions_type = "tb"
 
 
 class FieldAttributes(BaseModel):
-    pass
+    model_config = ConfigDict(extra="forbid")
 
 
 class TextFieldAttributes(FieldAttributes):

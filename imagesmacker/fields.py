@@ -1,71 +1,89 @@
+from collections import deque
+
 from imagesmacker.models.coordinates import XYXY, RectangleCoordinates
 from imagesmacker.models.fields import (
     FieldsCoords,
+    RelativeContainer,
     RelativeDataFieldFormat,
+    RelativeFieldCell,
+    cells_type,
 )
 
 
-def relative_field_formatting(
-    data_field_format: RelativeDataFieldFormat,
+def relative_field_formatting(  # noqa: C901
+    data_field_format: RelativeContainer | RelativeDataFieldFormat,
     dimensions: RectangleCoordinates,
 ) -> FieldsCoords:
     """
-    _summary_.
+    Non-recursive version of relative layout formatter using a manual stack.
 
     Args:
-        data_field_format (RelativeDataFieldFormat): _description_
-        dimensions (Coordinates): Coordinate mode agnostic dimensions.
+        data_field_format (RelativeDataFieldFormat): Layout tree.
+        dimensions (RectangleCoordinates): Bounding box to render in.
 
     Returns:
-        dict[str, tuple[float, float, float, float]]: _description_
+        FieldsCoords: Dict of field names to XYXY positions.
     """
+    output: FieldsCoords = {}
 
-    initial_field_x, field_y, field_width, field_height = dimensions.xywh()
+    x, y, w, h = dimensions.xywh()
 
-    total_field_fractional_height: float = 0
-    ls_cell_fractional_widths: list[float] = []
+    # Stack of layout jobs
+    # Each job is: (cells, x, y, w, h, direction)
+    stack: deque[
+        tuple[RelativeContainer | RelativeDataFieldFormat, float, float, float, float]
+    ] = deque()
+    stack.append((data_field_format, x, y, w, h))  # root layout
 
-    for row in data_field_format.rows:
-        total_row_fractional_width: float = 0
+    container: RelativeContainer | RelativeDataFieldFormat
+    cells: cells_type
 
-        row_fractional_height = row.fr
-        row_cells = row.cells
+    while stack:
+        container, cur_x, cur_y, cur_w, cur_h = stack.pop()
+        cells = container.cells
+        direction = container.direction
 
-        total_field_fractional_height += row_fractional_height
+        total_fr = sum(cell.fr for cell in cells)
+        horizontal = direction in ("lr", "rl")
+        reverse = direction in ("rl", "bt")
 
-        for cell in row_cells:
-            total_row_fractional_width += cell.fr
+        offset = cur_x if horizontal else cur_y
+        cells_iter = reversed(cells) if reverse else cells
 
-        ls_cell_fractional_widths.append(total_row_fractional_width)
+        for cell in cells_iter:
+            frac = cell.fr / total_fr
+            size = cur_w * frac if horizontal else cur_h * frac
 
-    output: dict[str, XYXY] = {}
+            if horizontal:
+                cell_x = offset
+                cell_y = cur_y
+                cell_w = size
+                cell_h = cur_h
+            else:
+                cell_x = cur_x
+                cell_y = offset
+                cell_w = cur_w
+                cell_h = size
 
-    for row, total_row_fractional_width in zip(
-        data_field_format.rows,
-        ls_cell_fractional_widths,
-        strict=True,
-    ):
-        row_fractional_height = row.fr
-        row_cells = row.cells
+            if isinstance(cell, RelativeFieldCell):
+                output[cell.name] = XYXY(
+                    round(cell_x),
+                    round(cell_y),
+                    round(cell_x + cell_w),
+                    round(cell_y + cell_h),
+                )
+            elif isinstance(cell, RelativeContainer):
+                # Push nested job onto stack
+                stack.append(
+                    (
+                        cell,
+                        cell_x,
+                        cell_y,
+                        cell_w,
+                        cell_h,
+                    ),
+                )
 
-        row_height = round(
-            field_height * (row_fractional_height / total_field_fractional_height),
-        )
-
-        field_x = initial_field_x
-
-        for cell in row_cells:
-            cell_fractional_width = cell.fr
-            cell_width = round(
-                field_width * (cell_fractional_width / total_row_fractional_width),
-            )
-            output[cell.name] = XYXY(
-                field_x,
-                field_y,
-                field_x + cell_width,
-                field_y + row_height,
-            )
-            field_x += cell_width
-        field_y += row_height
+            offset += size
 
     return output

@@ -33,7 +33,10 @@ margin_x2 = margin * 2
 draw.text(
     text=text,
     field_coords=XYWH(
-        margin, margin, image_width - margin_x2, image_height - margin_x2,
+        margin,
+        margin,
+        image_width - margin_x2,
+        image_height - margin_x2,
     ),
     field_attributes=field_attributes,
 )

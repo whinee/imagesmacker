@@ -10,9 +10,9 @@ from imagesmacker.models.draw import TextConfig, TextStyle
 from imagesmacker.models.fields import (
     FieldsConfig,
     FieldsCoords,
+    RelativeContainer,
     RelativeDataFieldFormat,
     RelativeFieldCell,
-    RelativeRow,
     TextFieldAttributes,
 )
 
@@ -63,9 +63,9 @@ for y_anchor in vertical_anchors:
                 style=TextStyle(fill="#fff"),
             ),
         )
-    data_field_fmt_rows.append(RelativeRow(fr=1, cells=y_anchor_list))
+    data_field_fmt_rows.append(RelativeContainer(fr=1, cells=y_anchor_list))
 
-data_field_fmt = RelativeDataFieldFormat(rows=data_field_fmt_rows)
+data_field_fmt = RelativeDataFieldFormat(cells=data_field_fmt_rows)
 
 # pprint(data_field_fmt)
 # pprint(fields_text)

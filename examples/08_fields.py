@@ -10,9 +10,9 @@ from imagesmacker.models.draw import TextConfig, TextStyle
 from imagesmacker.models.fields import (
     FieldsConfig,
     FieldsCoords,
+    RelativeContainer,
     RelativeDataFieldFormat,
     RelativeFieldCell,
-    RelativeRow,
     TextFieldAttributes,
 )
 
@@ -61,24 +61,50 @@ fields_text = {
     "A": "A: 1x1",
     "B": "B: 2x1",
     "C": "C: 1x2",
-    "D": "D: 2x2",
+    "D": "D: 2x1",
+    "E": "E: \n(1/3)x1",
+    "F": "F: \n(1/3)x1",
+    "G": "G: \n(1/3)x1",
 }
 
 data_field_fmt = RelativeDataFieldFormat(
-    rows=[
-        RelativeRow(
+    cells=[
+        RelativeContainer(
             fr=1,
             cells=[
                 RelativeFieldCell(fr=1, name="A"),
                 RelativeFieldCell(fr=2, name="B"),
             ],
+            direction="lr",
         ),
-        RelativeRow(
+        RelativeContainer(
             fr=2,
             cells=[
                 RelativeFieldCell(fr=1, name="C"),
-                RelativeFieldCell(fr=2, name="D"),
+                RelativeContainer(
+                    fr=2,
+                    cells=[
+                        RelativeFieldCell(fr=1, name="D"),
+                        RelativeContainer(
+                            fr=1,
+                            cells=[
+                                RelativeFieldCell(fr=1, name="E"),
+                                RelativeContainer(
+                                    fr=2,
+                                    cells=[
+                                        RelativeFieldCell(fr=1, name="F"),
+                                        RelativeFieldCell(fr=1, name="G"),
+                                    ],
+                                    direction="rl",
+                                ),
+                            ],
+                            direction="rl",
+                        ),
+                    ],
+                    direction="bt",
+                ),
             ],
+            direction="lr",
         ),
     ],
 )

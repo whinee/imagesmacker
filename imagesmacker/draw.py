@@ -120,7 +120,8 @@ class Draw:
         else:
             while True:
                 text_width, text_height = font_size_calculator.get_text_bbox(
-                    max_font_size, text,
+                    max_font_size,
+                    text,
                 )
 
                 if (text_width > field_width) or (text_height > field_height):
@@ -139,7 +140,8 @@ class Draw:
                     break
 
                 text_width, text_height = font_size_calculator.get_text_bbox(
-                    max_font_size, text,
+                    max_font_size,
+                    text,
                 )
 
         # If the text needs to be inverted (ie. turned upside down), then, it needs to

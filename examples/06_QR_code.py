@@ -26,7 +26,10 @@ draw.barcode(
     data=data,
     type="QR",
     field_coords=XYWH(
-        margin, margin, image_width - margin_x2, image_height - margin_x2,
+        margin,
+        margin,
+        image_width - margin_x2,
+        image_height - margin_x2,
     ),
     field_attributes=field_attributes,
 )
