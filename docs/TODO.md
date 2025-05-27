@@ -19,6 +19,7 @@ Items are sorted by priority, with the most important item at the top and least 
 
 ## Temporary
 
+- [ ] Implement binary search fitting multiline text in a box
 - [ ] Font loader thru fc-cache and whatnot
 - [ ] Visual regression testing
 - [ ] `imagesmacker.models` Models strict validation thru pydantic 
@@ -26,10 +27,11 @@ Items are sorted by priority, with the most important item at the top and least 
 - [ ] Migrate from `poetry` to `uv`
 - [ ] Add test coverage in README
 - [ ] Replace `pyyaml` library dependency with `ruamel.yaml`
+- [ ] Cloudflare pages
 
 ## Done
 
-- [ ] remove `docs/.obsidian`
+- [x] remove `docs/.obsidian`
 
 ## Ideas
 

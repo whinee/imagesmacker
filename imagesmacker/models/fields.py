@@ -6,14 +6,16 @@ from pydantic import BaseModel, ConfigDict
 from imagesmacker.models.coordinates import XYXY
 from imagesmacker.models.draw import BarcodeConfig, TextConfig
 
-cells_type = Sequence[Union["RelativeContainer", "RelativeFieldCell"]]
-directions_type = Literal["lr", "rl", "tb", "bt"]
+cells_type: TypeAlias = Sequence[Union["RelativeContainer", "RelativeFieldCell"]]
+directions_type: TypeAlias = Literal["lr", "rl", "tb", "bt"]
+cell_variant_types: TypeAlias = Literal["text", "barcode.code128","barcode.qr"]
 
 
 class RelativeFieldCell(BaseModel):
     model_config = ConfigDict(extra="forbid")
     fr: float
     name: str
+    variant: str | cell_variant_types = "text"
 
 
 class RelativeContainer(BaseModel):

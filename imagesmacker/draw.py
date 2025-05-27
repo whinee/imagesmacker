@@ -66,10 +66,7 @@ class Barcode:
 
 
 class Draw:
-    """
-    An abstraction of `ImageDraw.Draw` specifically for drawing texts
-    and barcodes in images.
-    """
+    """An abstraction of `ImageDraw.Draw` specifically for drawing texts and barcodes in images."""
 
     def __init__(self, image: Image.Image) -> None:
         self.image = image
@@ -82,7 +79,7 @@ class Draw:
         field_attributes: TextFieldAttributes,
     ) -> None:
         """
-        This method will try to fit the text within the field.
+        Try to fit the text within the field.
 
         Args:
         - text (`str`): Text to be drawn

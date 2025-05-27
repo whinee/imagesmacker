@@ -8,6 +8,7 @@ TextAnchor: TypeAlias = Literal["lt", "mt", "rt", "lm", "mm", "rm", "lb", "mb", 
 
 class TextStyle(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
     fill: _Ink = "#000"
     italics: bool = False  # not in use
     underline: bool = False  # not in use
@@ -15,6 +16,7 @@ class TextStyle(BaseModel):
 
 class TextConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
     font_filepath: str
     min_font_size: int = 1
     max_font_size: int = 100
@@ -24,13 +26,9 @@ class TextConfig(BaseModel):
     inverted: bool = False
     style: TextStyle = TextStyle()
 
-
-class BarcodeConfig(BaseModel):
-    pass
-
-
-class Code128Config(BarcodeConfig):
+class Code128Config(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
     options: Optional[dict[str, Any]] = None
     module_width: float = 0.2
     module_height: float = 15
@@ -38,8 +36,9 @@ class Code128Config(BarcodeConfig):
     text_distance: int = 2
 
 
-class QRCodeConfig(BarcodeConfig):
+class QRCodeConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
     error_correction: int = 0
     box_size: int = 20
     border: int = 1
@@ -47,6 +46,19 @@ class QRCodeConfig(BarcodeConfig):
     background_color: str | tuple[int, int, int] = "white"
     foreground_color: str | tuple[int, int, int] = "black"
 
+
+class BarcodeConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    
+    code128: Optional[Code128Config] = None
+    qr: Optional[QRCodeConfig] = None
+
+
+class FieldConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    text: Optional[TextConfig] = None
+    barcode: Optional[BarcodeConfig] = None
 
 def validate_text_anchor(anchor: str):
     if len(anchor) != 2:
