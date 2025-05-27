@@ -17,7 +17,7 @@ class TextStyle(BaseModel):
 class TextConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    font_filepath: str
+    font: str
     min_font_size: int = 1
     max_font_size: int = 100
     anchor: TextAnchor = "mm"
@@ -49,7 +49,7 @@ class QRCodeConfig(BaseModel):
 
 class BarcodeConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    
+
     code128: Optional[Code128Config] = None
     qr: Optional[QRCodeConfig] = None
 
