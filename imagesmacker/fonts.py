@@ -26,6 +26,7 @@ class FontSizeCalculator:
         - draw (`ImageDraw.ImageDraw`): The ImageDraw object to use for text measurement.
         - font_path (`str`): The font path to use.
         - kwargs (`dict[str, Any]`): Additional keyword arguments.
+
         """
         self.draw = draw
         self.font_path = font_path
@@ -40,10 +41,11 @@ class FontSizeCalculator:
 
         Returns:
         `list[int]`: A list containing the width and height of the text.
+
         """
         x1, y1, x2, y2 = self.draw.multiline_textbbox(
             xy=(0, 0),
             text=text,
             font=font_loader(self.font_path, size),
         )
-        return (x2 - x1, y2 - y1)
+        return (round(x2 - x1), round(y2 - y1))

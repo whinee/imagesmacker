@@ -1,0 +1,8 @@
+app_name_proper: ImageSmacker.py
+app_name: imagesmacker
+copyright_holder: |-
+    Copyright © 2024-2025 [whinee](https://github.com/whinee)
+synopsis: Python image manipulation library
+description: ImageSmacker is a Python library on top of Pillow that draws text onto an image.
+internals:
+    magic_str: c0VjUmVUX2NPZEUgYnkgd2hpX25l

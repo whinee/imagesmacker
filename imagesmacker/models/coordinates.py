@@ -60,6 +60,7 @@ class RectangleCoordinates(metaclass=abc.ABCMeta):
 
     Args:
         metaclass (_type_, optional): _description_. Defaults to abc.ABCMeta.
+
     """
 
     coords: NamedTuple
@@ -72,7 +73,7 @@ class RectangleCoordinates(metaclass=abc.ABCMeta):
     def xywh(self) -> XYWHNamedTuple:
         pass
 
-    def text_coordinates(self, anchor: TextAnchor = "mm") -> tuple[int, int]:
+    def text_coordinates(self, anchor: TextAnchor = "mm") -> tuple[int, int]:  # noqa: C901
         """
         `RectangleCoordinates` is often used as.
 
@@ -81,6 +82,7 @@ class RectangleCoordinates(metaclass=abc.ABCMeta):
 
         Returns:
         `tuple[int, int]`: _description_
+
         """
         validate_text_anchor(anchor)
         x1, y1, x2, y2 = self.xyxy()
@@ -168,6 +170,7 @@ class XYXY(RectangleCoordinates):
 
         Returns:
         `XYWHNamedTuple`
+
         """
 
         x1, y1, x2, y2 = self.coords
@@ -192,6 +195,7 @@ class XYWH(RectangleCoordinates):
 
         Returns:
         `XYXYNamedTuple`
+
         """
 
         x, y, w, h = self.coords

@@ -23,6 +23,7 @@ def relative_field_formatting(  # noqa: C901
 
     Returns:
         FieldsCoords: Dict of field names to XYXY positions.
+
     """
     output: FieldsCoords = {}
 

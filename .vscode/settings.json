@@ -1,6 +1,6 @@
 {
     "python.defaultInterpreterPath": ".venv/bin/python",
-    "autoDocstring.customTemplatePath": "dev/autodoc.mustache",
+    "autoDocstring.customTemplatePath": "dev/tpl/others/autodoc.mustache",
     "files.exclude": {
         // false
         "**/.git*": false,

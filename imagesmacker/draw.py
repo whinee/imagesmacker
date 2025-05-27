@@ -88,6 +88,7 @@ class Draw:
         - text (`str`): Text to be drawn
         - field_coords (`RectangleCoordinates`): _description_
         - field_attributes (`FieldAttributes`): _description_
+
         """
 
         # If there is no text to draw, return immediately.
@@ -217,9 +218,11 @@ class Draw:
                     )
                 case "m":
                     vertical_additive = round(
-                        (field_height - text_height) / 2
-                        if text_config.inverted
-                        else field_y + ((field_height - text_height) / 2),
+                        (
+                            (field_height - text_height) / 2
+                            if text_config.inverted
+                            else field_y + ((field_height - text_height) / 2)
+                        ),
                     )
                 case "b":
                     vertical_additive = (

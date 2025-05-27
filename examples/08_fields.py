@@ -109,7 +109,7 @@ data_field_fmt = RelativeDataFieldFormat(
     ],
 )
 
-fields_config = {key: default_text_field_attr for key in fields_text.keys()}
+fields_config = dict.fromkeys(fields_text.keys(), default_text_field_attr)
 
 fields_coords = relative_field_formatting(
     data_field_fmt,

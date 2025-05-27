@@ -1,0 +1,28 @@
+group_command_params:
+  name: alltheutils_dev_tools
+  context_settings:
+    help_option_names:
+      - -h
+      - --help
+commands:
+  bump:
+    help:
+      description: |-
+        Bump library version
+        
+        It is recommended to not supply the [part] argument to see what part of the version will be bumped and how it will look like.
+    arguments:
+      part:
+        kwargs:
+          type: str
+          required: false
+        help:
+          help: part of version to bump
+          example: major, minor, patch, prerelease, prerelease_num
+    options:
+      build:
+        kwargs:
+          type: str
+          required: false
+        help:
+          help: build part of the version

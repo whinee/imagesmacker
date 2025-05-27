@@ -1,12 +1,12 @@
 from collections.abc import Sequence
-from typing import Literal, TypeAlias
+from typing import Literal, TypeAlias, Union
 
 from pydantic import BaseModel, ConfigDict
 
 from imagesmacker.models.coordinates import XYXY
 from imagesmacker.models.draw import BarcodeConfig, TextConfig
 
-cells_type = Sequence["RelativeContainer" | "RelativeFieldCell"]
+cells_type = Sequence[Union["RelativeContainer", "RelativeFieldCell"]]
 directions_type = Literal["lr", "rl", "tb", "bt"]
 
 

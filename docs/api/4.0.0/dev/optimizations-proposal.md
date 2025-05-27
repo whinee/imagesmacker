@@ -1,0 +1,2 @@
+- Font size caching
+- **Text fitting binary search**

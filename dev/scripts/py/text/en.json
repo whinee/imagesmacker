@@ -1,0 +1,24 @@
+{
+    "cli": {
+        "init": {
+            "choose_language": "Choose language"
+        },
+        "prompt": {
+            "answer": "Answer",
+            "list_selector_instruction": "Use up and down arrow keys to navigate, press enter key to choose"
+        },
+        "general": {
+            "keyboard_interrupt": "Cancelled by user",
+            "below_min_width": "Your terminal width is well below than the bare minimum\n\n{terminal_width} instead of {min_terminal_width} and above\n\nConsider resizing"
+        },
+        "below_recommended_width": "Your terminal width is below than the recommended\n\n{terminal_width} instead of {recc_terminal_width} and above",
+        "commands": {
+            "version": {
+                "help": {
+                    "overview": "display application version",
+                    "description": "Print version of the program. Useful for reports and debugging."
+                }
+            }
+        }
+    }
+}

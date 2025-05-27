@@ -13,10 +13,11 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## 4.0.0 (Unreleased)
+## 4.0.0
 
 ### Added
 
+- Utilities for handling angled text.
 - Added parameter `min_font_size` to `imagesmacker.models.draw.TextConfig`
 - Added parameter `direction` to models `imagesmacker.models.fields.RelativeRow` (now named `imagesmacker.models.fields.RelativeContainer`) and `imagesmacker.models.fields.RelativeDataFieldFormat`
 
@@ -26,13 +27,7 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 - Changed `imagesmacker.models.draw.TextConfig`'s `font_size` parameter name to `max_font_size`
 - Renamed `imagesmacker.models.fields.RelativeRow` to `imagesmacker.models.fields.RelativeContainer`
 
-## 3.0.2
-
-### Added
-
-- Utilities for handling angled text.
-
-### Fixed
+### Removed
 
 - Removed useless dependencies.
 

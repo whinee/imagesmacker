@@ -42,6 +42,7 @@ def scale_and_center_rect(
 
     Returns:
         XYXY: Resulting xyxy.
+
     """
     br_x1, br_y1, br_x2, br_y2 = br_coords.xyxy()
     br_w = br_x2 - br_x1
