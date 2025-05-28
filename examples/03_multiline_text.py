@@ -3,10 +3,7 @@ from PIL import Image
 
 from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYWH
-from imagesmacker.models.draw import TextConfig, TextStyle
-from imagesmacker.models.fields import (
-    TextFieldAttributes,
-)
+from imagesmacker.models.draw import FieldConfig, TextConfig, TextStyle
 
 text = """Address: #19 Lo St., Breezy Hills,
 Brgy. San Roque, Quezon City, Metro Manila"""
@@ -16,8 +13,8 @@ image = Image.new("RGB", image_size, color="black")
 
 draw = Draw(image)
 
-field_attributes = TextFieldAttributes(
-    text_config=TextConfig(
+field_attributes = FieldConfig(
+    text=TextConfig(
         font=f"{parent_dir_nth_times(__file__, 2)}/assets/fonts/arial bold.ttf",
         max_font_size=50,
         anchor="mm",
@@ -29,8 +26,9 @@ field_attributes = TextFieldAttributes(
 margin = 25
 margin_x2 = margin * 2
 
-draw.text(
-    text=text,
+draw.data(
+    type="text",
+    data=text,
     field_coords=XYWH(
         margin,
         margin,

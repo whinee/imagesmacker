@@ -1,7 +1,7 @@
 [project]
 name = "imagesmacker"
 license = "MIT"
-version = "4.0.0"
+version = "5.0.0"
 description = "None"
 readme = "docs/README.md"
 requires-python = ">=3.12"

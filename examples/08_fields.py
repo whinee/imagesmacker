@@ -8,12 +8,10 @@ from imagesmacker.fields import relative_field_formatting
 from imagesmacker.models.coordinates import XYWH
 from imagesmacker.models.draw import TextConfig, TextStyle
 from imagesmacker.models.fields import (
-    FieldsConfig,
     FieldsCoords,
     RelativeContainer,
     RelativeDataFieldFormat,
     RelativeFieldCell,
-    TextFieldAttributes,
 )
 
 text = """The quick brown fox jumps over the lazy dog"""
@@ -32,26 +30,24 @@ image = Image.new("RGB", image_size, color="black")
 draw = ImageDraw.Draw(image)
 smack_draw = Draw(image)
 
-default_text_field_attr = TextFieldAttributes(
-    text_config=TextConfig(
-        font=default_font,
-        max_font_size=50,
-        anchor="mm",
-        break_text=True,
-        style=TextStyle(fill="#fff"),
-    ),
+default_text_field_attr = TextConfig(
+    font=default_font,
+    max_font_size=50,
+    anchor="mm",
+    break_text=True,
+    style=TextStyle(fill="#fff"),
 )
 
 
 def walk(
     fields_text: dict[str, str],
     fields_coords: FieldsCoords,
-    fields_config: FieldsConfig,
+    fields_config: dict[str, TextConfig],
 ) -> None:
     for field_name, field_text in fields_text.items():
-        field_attributes: TextFieldAttributes = fields_config[field_name]  # type: ignore
+        field_attributes: TextConfig = fields_config[field_name]  # type: ignore
         smack_draw.text(
-            text=field_text,
+            data=field_text,
             field_coords=fields_coords[field_name],
             field_attributes=field_attributes,
         )

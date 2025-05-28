@@ -73,7 +73,10 @@ class RectangleCoordinates(metaclass=abc.ABCMeta):
     def xywh(self) -> XYWHNamedTuple:
         pass
 
-    def text_coordinates(self, anchor: TextAnchor = "mm") -> tuple[int, int]:  # noqa: C901
+    def text_coordinates(  # noqa: C901
+        self,
+        anchor: TextAnchor = "mm",
+    ) -> tuple[int, int]:
         """
         `RectangleCoordinates` is often used as.
 

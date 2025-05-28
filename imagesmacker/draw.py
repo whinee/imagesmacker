@@ -23,16 +23,18 @@ from imagesmacker.models.draw import (
 from imagesmacker.utils import scale_and_center_rect
 
 
-def check_if_type_in_field_attrs(field_attributes: BaseModel) -> Callable[[str], BaseModel]:
+def check_if_type_in_field_attrs(
+    field_attributes: BaseModel,
+) -> Callable[[str], BaseModel]:
     def inner(type: str) -> BaseModel:
         original_type = type
         types = type.split(":")
         extracted_field_attributes = field_attributes
         for type_iter in types:
-            extracted_field_attributes = getattr(extracted_field_attributes, type_iter, None) # type: ignore
+            extracted_field_attributes = getattr(extracted_field_attributes, type_iter, None)  # type: ignore
             if extracted_field_attributes is None:
                 raise DrawDataTypeNotInFieldAttrs(original_type)
-        return extracted_field_attributes # type: ignore
+        return extracted_field_attributes  # type: ignore
 
     return inner
 
@@ -73,8 +75,6 @@ class Barcode:
         field_coords: RectangleCoordinates,
         field_attributes: QRCodeConfig,
     ) -> BaseImage:
-        print("FUCK2", field_attributes)
-        
         qr = QRCode(
             border=field_attributes.border,
             box_size=field_attributes.box_size,
@@ -400,9 +400,12 @@ class Draw:
             case _:
                 raise DrawDataTypeInvalid(type(field_attributes).__name__)
 
-        print("FUCK1", field_attributes)
+        barcode = getattr(Barcode, data_type)(
+            data=data,
+            field_coords=field_coords,
+            field_attributes=field_attributes,
+        )
 
-        barcode = getattr(Barcode, data_type)(data, field_attributes, field_coords)
         size: tuple[int, int] = barcode.size
 
         barcode_coords = scale_and_center_rect(field_coords, size)
@@ -422,7 +425,7 @@ class Draw:
     ) -> None:
         fn: Callable[..., None]
         extracted_field_attributes: Any
-        
+
         original_type = type
         citifa = check_if_type_in_field_attrs(field_attributes)
         extracted_field_attributes = citifa(type)
@@ -437,5 +440,5 @@ class Draw:
                         fn = self.barcode
                     case _:
                         raise DrawDataTypeInvalid(original_type)
-                            
+
         fn(data, field_coords, extracted_field_attributes)

@@ -26,6 +26,7 @@ class TextConfig(BaseModel):
     inverted: bool = False
     style: TextStyle = TextStyle()
 
+
 class Code128Config(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -59,6 +60,7 @@ class FieldConfig(BaseModel):
 
     text: Optional[TextConfig] = None
     barcode: Optional[BarcodeConfig] = None
+
 
 def validate_text_anchor(anchor: str):
     if len(anchor) != 2:

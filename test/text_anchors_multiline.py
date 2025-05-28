@@ -8,12 +8,10 @@ from imagesmacker.fields import relative_field_formatting
 from imagesmacker.models.coordinates import XYWH
 from imagesmacker.models.draw import TextConfig, TextStyle
 from imagesmacker.models.fields import (
-    FieldsConfig,
     FieldsCoords,
     RelativeContainer,
     RelativeDataFieldFormat,
     RelativeFieldCell,
-    TextFieldAttributes,
 )
 
 data_field_fmt_rows = []
@@ -37,12 +35,12 @@ text = """The quick brown fox jumps over the lazy dog"""
 def walk(
     fields_text: dict[str, str],
     fields_coords: FieldsCoords,
-    fields_config: FieldsConfig,
+    fields_config: dict[str, TextConfig],
 ) -> None:
     for field_name, field_text in fields_text.items():
-        field_attributes: TextFieldAttributes = fields_config[field_name]  # type: ignore
+        field_attributes: TextConfig = fields_config[field_name]  # type: ignore
         smack_draw.text(
-            text=field_text,
+            data=field_text,
             field_coords=fields_coords[field_name],
             field_attributes=field_attributes,
         )
@@ -54,17 +52,15 @@ for y_anchor in vertical_anchors:
         text_anchor = x_anchor + y_anchor
         y_anchor_list.append(RelativeFieldCell(fr=1, name=text_anchor))
         fields_text[text_anchor] = text
-        fields_config[text_anchor] = TextFieldAttributes(
-            text_config=TextConfig(
-                font_filepath=os.path.join(
-                    parent_dir_nth_times(__file__, 2),
-                    "assets/fonts/arial bold.ttf",
-                ),
-                max_font_size=50,
-                anchor=text_anchor,  # type: ignore
-                break_text=True,
-                style=TextStyle(fill="#fff"),
+        fields_config[text_anchor] = TextConfig(
+            font=os.path.join(
+                parent_dir_nth_times(__file__, 2),
+                "assets/fonts/arial bold.ttf",
             ),
+            max_font_size=50,
+            anchor=text_anchor,  # type: ignore
+            break_text=True,
+            style=TextStyle(fill="#fff"),
         )
     data_field_fmt_rows.append(RelativeContainer(fr=1, cells=y_anchor_list))
 

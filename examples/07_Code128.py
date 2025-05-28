@@ -3,10 +3,7 @@ from PIL import Image
 
 from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYWH
-from imagesmacker.models.draw import Code128Config
-from imagesmacker.models.fields import (
-    BarcodeFieldAttributes,
-)
+from imagesmacker.models.draw import BarcodeConfig, Code128Config, FieldConfig
 
 data = """123456 jump!"""
 
@@ -15,16 +12,18 @@ image = Image.new("RGB", image_size, color="black")
 
 draw = Draw(image)
 
-field_attributes = BarcodeFieldAttributes(
-    barcode_config=Code128Config(),
+field_attributes = FieldConfig(
+    barcode=BarcodeConfig(
+        code128=Code128Config(),
+    ),
 )
 
 margin = 25
 margin_x2 = margin * 2
 
-draw.barcode(
+draw.data(
+    type="barcode:code128",
     data=data,
-    type="Code128",
     field_coords=XYWH(
         margin,
         margin,

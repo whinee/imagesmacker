@@ -8,12 +8,13 @@ from alltheutils.exceptions import ValidationError
 class DrawDataError(BaseException):
     pass
 
-class DrawDataValidationError(DrawDataError, ValidationError): # type: ignore
+
+class DrawDataValidationError(DrawDataError, ValidationError):  # type: ignore
     pass
 
 
 @custom_exception
-class DrawDataTypeNotInFieldAttrs(DrawDataValidationError, CustomBaseException): # type: ignore
+class DrawDataTypeNotInFieldAttrs(DrawDataValidationError, CustomBaseException):  # type: ignore
     def __init__(self, type: str) -> None:
         """
         Raised when the type is not in the provided field attributes.
@@ -26,7 +27,7 @@ class DrawDataTypeNotInFieldAttrs(DrawDataValidationError, CustomBaseException):
 
 
 @custom_exception
-class DrawDataTypeInvalid(DrawDataValidationError, CustomBaseException): # type: ignore
+class DrawDataTypeInvalid(DrawDataValidationError, CustomBaseException):  # type: ignore
     def __init__(self, type: str) -> None:
         """
         Raised when the type is invalid.

@@ -13,6 +13,24 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
+## 5.0.0
+
+### Added
+
+- `imagesmacker.draw.Draw.data` for type-agnostic data drawing
+
+### Changed
+
+- Renamed `imagesmacker.draw.Draw.text` parameter `text` name to `data` to align with other types (only barcode at this moment)
+- Renamed `imagesmacker.models.draw.TextConfig`'s `font_filepath` parameter name to `font`
+
+### Removed
+
+- `imagesmacker.models.fields.BarcodeFieldAttributes`
+- `imagesmacker.models.fields.FieldAttributes`
+- `imagesmacker.models.fields.FieldsConfig`
+- `imagesmacker.models.fields.TextFieldAttributes`
+
 ## 4.0.0
 
 ### Added
