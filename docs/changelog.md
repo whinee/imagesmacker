@@ -13,6 +13,12 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
+## Unreleased
+
+### Changed
+
+- Changed delimiter of data types in `imagesmacker.draw.check_if_type_in_field_attrs` from `:` (colon) to `.` (dot)
+
 ## 5.0.0
 
 ### Added

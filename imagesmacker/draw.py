@@ -28,7 +28,7 @@ def check_if_type_in_field_attrs(
 ) -> Callable[[str], BaseModel]:
     def inner(type: str) -> BaseModel:
         original_type = type
-        types = type.split(":")
+        types = type.split(".")
         extracted_field_attributes = field_attributes
         for type_iter in types:
             extracted_field_attributes = getattr(extracted_field_attributes, type_iter, None)  # type: ignore
