@@ -67,12 +67,19 @@ def relative_field_formatting(  # noqa: C901
                 cell_h = size
 
             if isinstance(cell, RelativeFieldCell):
-                output[cell.name] = XYXY(
+                cell_coords = XYXY(
                     round(cell_x),
                     round(cell_y),
                     round(cell_x + cell_w),
                     round(cell_y + cell_h),
                 )
+                op_cell = output.get(cell.name)
+                if op_cell:
+                    if isinstance(op_cell, list):
+                        op_cell.append(cell_coords)
+                    else:
+                        op_cell = [op_cell, cell_coords] # type: ignore
+                output[cell.name] = op_cell # type: ignore
             elif isinstance(cell, RelativeContainer):
                 # Push nested job onto stack
                 stack.append(
