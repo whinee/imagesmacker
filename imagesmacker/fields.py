@@ -79,7 +79,7 @@ def relative_field_formatting(  # noqa: C901
                         op_cell.append(cell_coords)
                     else:
                         op_cell = [op_cell, cell_coords] # type: ignore
-                output[cell.name] = op_cell # type: ignore
+                output[cell.name] = cell_coords # type: ignore
             elif isinstance(cell, RelativeContainer):
                 # Push nested job onto stack
                 stack.append(

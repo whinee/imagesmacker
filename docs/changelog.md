@@ -18,6 +18,7 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 ### Changed
 
 - Changed delimiter of data types in `imagesmacker.draw.check_if_type_in_field_attrs` from `:` (colon) to `.` (dot)
+- Changed `imagesmacker.fields.relative_field_formatting` to allow for cells with the same name
 
 ## 5.0.0
 
