@@ -1,26 +1,48 @@
+from collections.abc import Callable
 from textwrap import wrap
-from typing import Any, Literal
+from typing import Any
 
 from barcode import Code128
 from barcode.writer import ImageWriter as BarcodeImageWriter
 from PIL import Image, ImageDraw
+from pydantic import BaseModel
 from qrcode.image.base import BaseImage
 from qrcode.image.pil import PilImage
 from qrcode.main import QRCode
 
+from imagesmacker.exceptions import DrawDataTypeInvalid, DrawDataTypeNotInFieldAttrs
 from imagesmacker.fonts import FontSizeCalculator, font_loader
 from imagesmacker.models.coordinates import XYXY, RectangleCoordinates
-from imagesmacker.models.draw import Code128Config, QRCodeConfig, TextConfig
-from imagesmacker.models.fields import BarcodeFieldAttributes, TextFieldAttributes
+from imagesmacker.models.draw import (
+    BarcodeConfig,
+    Code128Config,
+    FieldConfig,
+    QRCodeConfig,
+    TextConfig,
+)
 from imagesmacker.utils import scale_and_center_rect
+
+
+def check_if_type_in_field_attrs(field_attributes: BaseModel) -> Callable[[str], BaseModel]:
+    def inner(type: str) -> BaseModel:
+        original_type = type
+        types = type.split(":")
+        extracted_field_attributes = field_attributes
+        for type_iter in types:
+            extracted_field_attributes = getattr(extracted_field_attributes, type_iter, None) # type: ignore
+            if extracted_field_attributes is None:
+                raise DrawDataTypeNotInFieldAttrs(original_type)
+        return extracted_field_attributes # type: ignore
+
+    return inner
 
 
 class Barcode:
     @staticmethod
     def code128(
         data: str,
-        code_128_config: Code128Config,
         field_coords: RectangleCoordinates,
+        field_attributes: Code128Config,
     ) -> PilImage:
         options_parameters = [
             "module_width",
@@ -28,11 +50,11 @@ class Barcode:
             "quiet_zone",
             "text_distance",
         ]
-        options = {i: getattr(code_128_config, i) for i in options_parameters}
+        options = {i: getattr(field_attributes, i) for i in options_parameters}
         barcode_class = Code128(data, writer=BarcodeImageWriter())
 
         bc_width, bc_height = barcode_class.render(
-            writer_options=code_128_config.options,
+            writer_options=field_attributes.options,
             text="",
         ).size
         field_width, field_height = field_coords.xywh()[2:4]
@@ -48,18 +70,20 @@ class Barcode:
     @staticmethod
     def qr(
         data: str,
-        qr_code_config: QRCodeConfig,
         field_coords: RectangleCoordinates,
+        field_attributes: QRCodeConfig,
     ) -> BaseImage:
+        print("FUCK2", field_attributes)
+        
         qr = QRCode(
-            border=qr_code_config.border,
-            box_size=qr_code_config.box_size,
+            border=field_attributes.border,
+            box_size=field_attributes.box_size,
         )
         qr.add_data(data)
         qr.make(fit=True)
         return qr.make_image(
-            back_color=qr_code_config.background_color,
-            fill_color=qr_code_config.foreground_color,
+            back_color=field_attributes.background_color,
+            fill_color=field_attributes.foreground_color,
             # image_factory=StyledPilImage,
             # module_drawer=RoundedModuleDrawer(),
         )
@@ -74,9 +98,9 @@ class Draw:
 
     def text(  # noqa: C901
         self,
-        text: str,
+        data: str,
         field_coords: RectangleCoordinates,
-        field_attributes: TextFieldAttributes,
+        field_attributes: TextConfig,
     ) -> None:
         """
         Try to fit the text within the field.
@@ -88,17 +112,19 @@ class Draw:
 
         """
 
+        text = data
+
         # If there is no text to draw, return immediately.
         if (text is None) or (str(text).strip() == ""):
             return
 
-        text_config = field_attributes.text_config
+        text_config = field_attributes
 
         max_font_size = text_config.max_font_size
         anchor = text_config.anchor
         text_style = text_config.style
 
-        font_size_calculator = FontSizeCalculator(self.draw, text_config.font_filepath)
+        font_size_calculator = FontSizeCalculator(self.draw, text_config.font)
 
         field_x1, field_y1, field_x2, field_y2 = field_coords.xyxy()
         field_x_coords, field_y, field_width, field_height = field_coords.xywh()
@@ -187,7 +213,7 @@ class Draw:
 
         draw_text_common_kwargs: dict[str, Any] = {
             "font": font_loader(
-                text_config.font_filepath,
+                text_config.font,
                 max_font_size,
             ),
             "anchor": anchor,
@@ -359,17 +385,24 @@ class Draw:
     def barcode(
         self,
         data: str,
-        type: Literal["Code128", "QR"],
         field_coords: RectangleCoordinates,
-        field_attributes: BarcodeFieldAttributes,
+        field_attributes: type[BarcodeConfig],
     ) -> None:
         # If there is no text to draw, return immediately.
         if (data is None) or (str(data).strip() == ""):
             return
 
-        barcode_config = field_attributes.barcode_config
+        match field_attributes:
+            case Code128Config():
+                data_type = "code128"
+            case QRCodeConfig():
+                data_type = "qr"
+            case _:
+                raise DrawDataTypeInvalid(type(field_attributes).__name__)
 
-        barcode = getattr(Barcode, type.lower())(data, barcode_config, field_coords)
+        print("FUCK1", field_attributes)
+
+        barcode = getattr(Barcode, data_type)(data, field_attributes, field_coords)
         size: tuple[int, int] = barcode.size
 
         barcode_coords = scale_and_center_rect(field_coords, size)
@@ -379,3 +412,30 @@ class Draw:
             barcode.resize(barcode_wh, Image.Resampling.LANCZOS),
             barcode_coords.xyxy(),
         )
+
+    def data(
+        self,
+        type: str,
+        data: str,
+        field_coords: RectangleCoordinates,
+        field_attributes: FieldConfig,
+    ) -> None:
+        fn: Callable[..., None]
+        extracted_field_attributes: Any
+        
+        original_type = type
+        citifa = check_if_type_in_field_attrs(field_attributes)
+        extracted_field_attributes = citifa(type)
+
+        match type:
+            case "text":
+                fn = self.text
+            case _:
+                type, *subtypes = type.split(":")
+                match type:
+                    case "barcode":
+                        fn = self.barcode
+                    case _:
+                        raise DrawDataTypeInvalid(original_type)
+                            
+        fn(data, field_coords, extracted_field_attributes)

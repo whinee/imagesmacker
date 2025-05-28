@@ -3,10 +3,7 @@ from PIL import Image
 
 from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYWH
-from imagesmacker.models.draw import QRCodeConfig
-from imagesmacker.models.fields import (
-    BarcodeFieldAttributes,
-)
+from imagesmacker.models.draw import BarcodeConfig, FieldConfig, QRCodeConfig
 
 data = """123456 jump!"""
 
@@ -15,16 +12,18 @@ image = Image.new("RGB", image_size, color="black")
 
 draw = Draw(image)
 
-field_attributes = BarcodeFieldAttributes(
-    barcode_config=QRCodeConfig(),
+field_attributes = FieldConfig(
+    barcode=BarcodeConfig(
+        qr=QRCodeConfig(),
+    ),
 )
 
 margin = 25
 margin_x2 = margin * 2
 
-draw.barcode(
+draw.data(
     data=data,
-    type="QR",
+    type="barcode:qr",
     field_coords=XYWH(
         margin,
         margin,

@@ -34,7 +34,7 @@ smack_draw = Draw(image)
 
 default_text_field_attr = TextFieldAttributes(
     text_config=TextConfig(
-        font_filepath=default_font,
+        font=default_font,
         max_font_size=50,
         anchor="mm",
         break_text=True,

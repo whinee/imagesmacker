@@ -18,7 +18,7 @@ draw = Draw(image)
 
 field_attributes = TextFieldAttributes(
     text_config=TextConfig(
-        font_filepath=f"{parent_dir_nth_times(__file__, 2)}/assets/fonts/arial bold.ttf",
+        font=f"{parent_dir_nth_times(__file__, 2)}/assets/fonts/arial bold.ttf",
         max_font_size=100,
         anchor="mm",
         inverted=True,

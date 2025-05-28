@@ -1,6 +1,6 @@
 import abc
 from collections.abc import Iterator
-from typing import NamedTuple, cast
+from typing import Literal, NamedTuple, TypeAlias, cast
 
 from imagesmacker.models.draw import TextAnchor, validate_text_anchor
 
@@ -204,3 +204,7 @@ class XYWH(RectangleCoordinates):
 
     def xywh(self) -> XYWHNamedTuple:
         return cast(XYWHNamedTuple, self.coords)
+
+
+coordinates_type_alias: TypeAlias = Literal["XY", "WH"]
+rectangle_coordinates_type_alias: TypeAlias = Literal["XYXY", "XYWH"]

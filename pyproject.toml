@@ -176,3 +176,9 @@ max-complexity = 5
 
 [tool.ruff.lint.pycodestyle]
 ignore-overlong-task-comments = false
+
+[tool.ruff.lint.per-file-ignores]
+"examples/*" = [
+    "INP001",
+    "N999"
+]
