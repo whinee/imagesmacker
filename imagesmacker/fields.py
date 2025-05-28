@@ -74,12 +74,13 @@ def relative_field_formatting(  # noqa: C901
                     round(cell_y + cell_h),
                 )
                 op_cell = output.get(cell.name)
-                if op_cell:
+                if op_cell is None:
+                    output[cell.name] = cell_coords # type: ignore
+                else:
                     if isinstance(op_cell, list):
-                        op_cell.append(cell_coords)
+                        output[cell.name] = [*op_cell, cell_coords] # type: ignore
                     else:
-                        op_cell = [op_cell, cell_coords] # type: ignore
-                output[cell.name] = cell_coords # type: ignore
+                        output[cell.name] = [op_cell, cell_coords] # type: ignore
             elif isinstance(cell, RelativeContainer):
                 # Push nested job onto stack
                 stack.append(
