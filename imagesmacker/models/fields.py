@@ -31,9 +31,12 @@ class RelativeDataFieldFormat(BaseModel):
 
 
 class FieldCoords(BaseModel):
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(
+        extra="forbid",
+        arbitrary_types_allowed=True,
+    )
     coords: XYXY
     type: str | cell_variant_types = "text"
 
 
-FieldsCoords: TypeAlias = dict[str, FieldCoords]
+FieldsCoords: TypeAlias = dict[str, list[FieldCoords]]
