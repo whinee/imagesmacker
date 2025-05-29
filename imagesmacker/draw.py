@@ -434,7 +434,7 @@ class Draw:
             case "text":
                 fn = self.text
             case _:
-                type, *subtypes = type.split(":")
+                type, *subtypes = type.split(".")
                 match type:
                     case "barcode":
                         fn = self.barcode

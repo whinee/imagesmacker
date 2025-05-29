@@ -30,4 +30,10 @@ class RelativeDataFieldFormat(BaseModel):
     direction: str | directions_type = "tb"
 
 
-FieldsCoords: TypeAlias = dict[str, XYXY]
+class FieldCoords(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    coords: XYXY
+    type: str | cell_variant_types = "text"
+
+
+FieldsCoords: TypeAlias = dict[str, FieldCoords]

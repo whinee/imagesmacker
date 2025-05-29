@@ -2,6 +2,7 @@ from collections import deque
 
 from imagesmacker.models.coordinates import XYXY, RectangleCoordinates
 from imagesmacker.models.fields import (
+    FieldCoords,
     FieldsCoords,
     RelativeContainer,
     RelativeDataFieldFormat,
@@ -13,6 +14,7 @@ from imagesmacker.models.fields import (
 def relative_field_formatting(  # noqa: C901
     data_field_format: RelativeContainer | RelativeDataFieldFormat,
     dimensions: RectangleCoordinates,
+    margin: int = 0,
 ) -> FieldsCoords:
     """
     Non-recursive version of relative layout formatter using a manual stack.
@@ -51,9 +53,14 @@ def relative_field_formatting(  # noqa: C901
         offset = cur_x if horizontal else cur_y
         cells_iter = reversed(cells) if reverse else cells
 
+        num_gaps = max(len(cells) - 1, 0)
+        total_margin = margin * num_gaps
+        available_w = cur_w - total_margin if horizontal else cur_w
+        available_h = cur_h - total_margin if not horizontal else cur_h
+
         for cell in cells_iter:
             frac = cell.fr / total_fr
-            size = cur_w * frac if horizontal else cur_h * frac
+            size = available_w * frac if horizontal else available_h * frac
 
             if horizontal:
                 cell_x = offset
@@ -73,14 +80,17 @@ def relative_field_formatting(  # noqa: C901
                     round(cell_x + cell_w),
                     round(cell_y + cell_h),
                 )
-                op_cell = output.get(cell.name)
-                if op_cell is None:
-                    output[cell.name] = cell_coords # type: ignore
+                cell_name, *raw_cell_type = cell.name.split(":")
+                if raw_cell_type:
+                    cell_type = raw_cell_type[0]
                 else:
-                    if isinstance(op_cell, list):
-                        output[cell.name] = [*op_cell, cell_coords] # type: ignore
-                    else:
-                        output[cell.name] = [op_cell, cell_coords] # type: ignore
+                    cell_type = "text"
+                cell_coords_type = FieldCoords(coords=cell_coords, type=cell_type)
+                op_cell = output.get(cell_name)
+                if op_cell is None:
+                    output[cell_name] = [cell_coords_type] # type: ignore
+                else:
+                    output[cell_name].append(cell_coords_type) # type: ignore
             elif isinstance(cell, RelativeContainer):
                 # Push nested job onto stack
                 stack.append(
@@ -93,6 +103,6 @@ def relative_field_formatting(  # noqa: C901
                     ),
                 )
 
-            offset += size
+            offset += size + margin
 
     return output

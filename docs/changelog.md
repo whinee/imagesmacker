@@ -13,12 +13,17 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 - `Fixed` for any bug fixes.
 - `Security` in case of vulnerabilities.
 
-## Unreleased
+## 6.0.0 (Unreleased)
+
+### Added
+
+- `imagesmacker.fields.FieldCoords`
 
 ### Changed
 
 - Changed delimiter of data types in `imagesmacker.draw.check_if_type_in_field_attrs` from `:` (colon) to `.` (dot)
-- Changed `imagesmacker.fields.relative_field_formatting` to allow for cells with the same name
+- Changed `imagesmacker.fields.relative_field_formatting` output to allow for cells with the same name
+- Modified `imagesmacker.fields.FieldsCoords` to include `imagesmacker.fields.FieldCoords` in it
 
 ## 5.0.0
 
