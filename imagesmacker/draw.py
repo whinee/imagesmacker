@@ -144,6 +144,7 @@ class Draw:
         # Else, we just try to fit a single line of text in the field
         else:
             font_size = max_font_size
+            max_size_reached = min_size_reached = False
             while True:
                 text_width, text_height = font_size_calculator.get_text_bbox(
                     font_size,
@@ -154,7 +155,10 @@ class Draw:
                     font_size = font_size // 2
                     if font_size < min_font_size:
                         font_size = min_font_size
-                        break
+                        if min_size_reached:
+                            break
+                        max_size_reached = False
+                        min_size_reached = True
                 elif (field_width > text_width > (field_width * 0.9)) or (
                     field_height > text_height > (field_height * 0.9)
                 ):
@@ -163,7 +167,10 @@ class Draw:
                     font_size = round(font_size * 1.5)
                     if font_size > max_font_size:
                         font_size = max_font_size
-                        break
+                        if max_size_reached:
+                            break
+                        min_size_reached = False
+                        max_size_reached = True
 
             while True:
                 if (font_size < max_font_size) and (text_width < field_width) and (text_height < field_height):
