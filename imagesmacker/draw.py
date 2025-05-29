@@ -121,6 +121,7 @@ class Draw:
         text_config = field_attributes
 
         max_font_size = text_config.max_font_size
+        min_font_size = text_config.min_font_size
         anchor = text_config.anchor
         text_style = text_config.style
 
@@ -142,29 +143,34 @@ class Draw:
             )
         # Else, we just try to fit a single line of text in the field
         else:
+            font_size = max_font_size
             while True:
                 text_width, text_height = font_size_calculator.get_text_bbox(
-                    max_font_size,
+                    font_size,
                     text,
                 )
 
                 if (text_width > field_width) or (text_height > field_height):
-                    max_font_size = max_font_size // 2
+                    font_size = font_size // 2
+                    if font_size < min_font_size:
+                        font_size = min_font_size
                 elif (field_width > text_width > (field_width * 0.9)) or (
                     field_height > text_height > (field_height * 0.9)
                 ):
                     break
                 else:
-                    max_font_size = round(max_font_size * 1.5)
+                    font_size = round(font_size * 1.5)
+                    if font_size > max_font_size:
+                        font_size = max_font_size
 
             while True:
                 if (text_width < field_width) and (text_height < field_height):
-                    max_font_size = max_font_size + 1
+                    font_size = font_size + 1
                 else:
                     break
 
                 text_width, text_height = font_size_calculator.get_text_bbox(
-                    max_font_size,
+                    font_size,
                     text,
                 )
 
