@@ -163,6 +163,7 @@ class Draw:
                     font_size = round(font_size * 1.5)
                     if font_size > max_font_size:
                         font_size = max_font_size
+                        break
 
             while True:
                 if (font_size < max_font_size) and (text_width < field_width) and (text_height < field_height):
