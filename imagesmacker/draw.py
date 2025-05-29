@@ -154,6 +154,7 @@ class Draw:
                     font_size = font_size // 2
                     if font_size < min_font_size:
                         font_size = min_font_size
+                        break
                 elif (field_width > text_width > (field_width * 0.9)) or (
                     field_height > text_height > (field_height * 0.9)
                 ):
@@ -164,7 +165,7 @@ class Draw:
                         font_size = max_font_size
 
             while True:
-                if (text_width < field_width) and (text_height < field_height):
+                if (font_size < max_font_size) and (text_width < field_width) and (text_height < field_height):
                     font_size = font_size + 1
                 else:
                     break
