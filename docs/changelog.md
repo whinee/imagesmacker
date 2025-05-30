@@ -25,6 +25,10 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 - Changed `imagesmacker.fields.relative_field_formatting` output to allow for cells with the same name
 - Modified `imagesmacker.fields.FieldsCoords` to include `imagesmacker.fields.FieldCoords` in it
 
+### Fixed
+
+- Renamed variables inside `imagesmacker.draw.Draw.text` to actually properly scale down/up the font size
+
 ## 5.0.0
 
 ### Added

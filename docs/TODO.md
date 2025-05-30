@@ -25,13 +25,13 @@ Items are sorted by priority, with the most important item at the top and least 
 - [ ] Visual regression testing
 - [ ] `imagesmacker.models` Models strict validation thru pydantic 
 - [ ] Use [typeguard](https://typeguard.readthedocs.io/en/stable/userguide.html) to type check function arguments and return values in runtime
-- [ ] Migrate from `poetry` to `uv`
 - [ ] Add test coverage in README
 - [ ] Replace `pyyaml` library dependency with `ruamel.yaml`
 - [ ] Cloudflare pages
 
 ## Done
 
+- [x] Migrate from `poetry` to `uv`
 - [x] remove `docs/.obsidian`
 
 ## Ideas

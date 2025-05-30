@@ -125,6 +125,8 @@ class Draw:
         anchor = text_config.anchor
         text_style = text_config.style
 
+        font_size = max_font_size
+
         font_size_calculator = FontSizeCalculator(self.draw, text_config.font)
 
         field_x1, field_y1, field_x2, field_y2 = field_coords.xyxy()
@@ -133,17 +135,16 @@ class Draw:
         # If the text is multiline or is allowed to be broken into multiple lines, then
         # we try to break it into multiple lines so that it can fit into the field
         if ("\n" in text) or text_config.break_text:
-            max_font_size, text_lines_list, text_height = self.break_text(
+            font_size, text_lines_list, text_height = self.break_text(
                 text=text,
                 text_config=text_config,
-                font_size=max_font_size,
+                font_size=font_size,
                 fsc=font_size_calculator,
                 field_width=field_width,
                 field_height=field_height,
             )
         # Else, we just try to fit a single line of text in the field
         else:
-            font_size = max_font_size
             max_size_reached = min_size_reached = False
             while True:
                 text_width, text_height = font_size_calculator.get_text_bbox(
@@ -182,7 +183,7 @@ class Draw:
                     font_size,
                     text,
                 )
-
+                
         # If the text needs to be inverted (ie. turned upside down), then, it needs to
         # undergo the following steps:
         if text_config.inverted:
@@ -229,7 +230,7 @@ class Draw:
         draw_text_common_kwargs: dict[str, Any] = {
             "font": font_loader(
                 text_config.font,
-                max_font_size,
+                font_size,
             ),
             "anchor": anchor,
             "fill": text_style.fill,
