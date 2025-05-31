@@ -39,11 +39,14 @@ def walk(
 ) -> None:
     for field_name, field_text in fields_text.items():
         field_attributes: TextConfig = fields_config[field_name]  # type: ignore
-        smack_draw.text(
-            data=field_text,
-            field_coords=fields_coords[field_name],
-            field_attributes=field_attributes,
-        )
+        for field_coords_type in fields_coords[field_name]:
+            field_coords = field_coords_type.coords
+            # field_type = field_coords_type.type
+            smack_draw.text(
+                data=field_text,
+                field_coords=field_coords,
+                field_attributes=field_attributes,
+            )
 
 
 for y_anchor in vertical_anchors:
@@ -62,7 +65,7 @@ for y_anchor in vertical_anchors:
             break_text=True,
             style=TextStyle(fill="#fff"),
         )
-    data_field_fmt_rows.append(RelativeContainer(fr=1, cells=y_anchor_list))
+    data_field_fmt_rows.append(RelativeContainer(fr=1, cells=y_anchor_list, direction="lr"))
 
 data_field_fmt = RelativeDataFieldFormat(cells=data_field_fmt_rows)
 
@@ -76,12 +79,13 @@ walk(fields_text=fields_text, fields_coords=fields_coords, fields_config=fields_
 
 def draw_boxes() -> None:
     for field_coords in fields_coords.values():
-        draw.rectangle(field_coords.list(), outline="white", width=3)
-        # x1, y1, x2, y2 = field_coords.list()
-        # middle_x = round((x1 + x2) / 2)
-        # middle_y = round((y1 + y2) / 2)
-        # draw.line((middle_x, y1, middle_x, y2), fill="white", width=1)
-        # draw.line((x1, middle_y, x2, middle_y), fill="white", width=1)
+        for field_coords_type in field_coords:
+            draw.rectangle(field_coords_type.coords.list(), outline="white", width=3)
+            # x1, y1, x2, y2 = field_coords.list()
+            # middle_x = round((x1 + x2) / 2)
+            # middle_y = round((y1 + y2) / 2)
+            # draw.line((middle_x, y1, middle_x, y2), fill="white", width=1)
+            # draw.line((x1, middle_y, x2, middle_y), fill="white", width=1)
 
 
 draw_boxes()

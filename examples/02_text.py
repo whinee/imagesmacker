@@ -15,7 +15,7 @@ draw = Draw(image)
 field_attributes = FieldConfig(
     text=TextConfig(
         font=f"{parent_dir_nth_times(__file__, 2)}/assets/fonts/arial bold.ttf",
-        max_font_size=1,
+        max_font_size=50,
         anchor="mm",
         style=TextStyle(fill="#fff"),
     ),

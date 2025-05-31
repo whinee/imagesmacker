@@ -22,7 +22,7 @@ margin = 25
 margin_x2 = margin * 2
 
 draw.data(
-    type="barcode:code128",
+    type="barcode.code128",
     data=data,
     field_coords=XYWH(
         margin,

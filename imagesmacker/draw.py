@@ -434,10 +434,10 @@ class Draw:
 
     def data(
         self,
-        type: str,
         data: str,
         field_coords: RectangleCoordinates,
         field_attributes: FieldConfig,
+        type: str = "text",
     ) -> None:
         fn: Callable[..., None]
         extracted_field_attributes: Any

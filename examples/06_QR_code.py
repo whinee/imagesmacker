@@ -23,7 +23,7 @@ margin_x2 = margin * 2
 
 draw.data(
     data=data,
-    type="barcode:qr",
+    type="barcode.qr",
     field_coords=XYWH(
         margin,
         margin,
