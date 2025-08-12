@@ -1,7 +1,7 @@
 from typing import Any, Literal, Optional, TypeAlias
 
 from PIL.ImageDraw import _Ink
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 TextAnchor: TypeAlias = Literal["lt", "mt", "rt", "lm", "mm", "rm", "lb", "mb", "rb"]
 
@@ -55,9 +55,20 @@ class BarcodeConfig(BaseModel):
     qr: Optional[QRCodeConfig] = None
 
 
+class ReplaceConfig(BaseModel):
+    regex: bool = False
+    note: str | None = None
+    items: dict[str, list[str]] = Field(default_factory=dict)
+
+class FieldMetadataConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    replace: list[ReplaceConfig] = Field(default_factory=list)
+
 class FieldConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
+    metadata: FieldMetadataConfig = FieldMetadataConfig()
     text: Optional[TextConfig] = None
     barcode: Optional[BarcodeConfig] = None
 
