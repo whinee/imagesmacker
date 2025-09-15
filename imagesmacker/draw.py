@@ -156,10 +156,11 @@ class Draw:
                     font_size = font_size // 2
                     if font_size < min_font_size:
                         font_size = min_font_size
-                        if min_size_reached:
-                            break
-                        max_size_reached = False
-                        min_size_reached = True
+                        # if min_size_reached:
+                        #     break
+                        # max_size_reached = False
+                        # min_size_reached = True
+                        break
                 elif (field_width > text_width > (field_width * 0.9)) or (
                     field_height > text_height > (field_height * 0.9)
                 ):
@@ -170,11 +171,16 @@ class Draw:
                         font_size = max_font_size
                         if max_size_reached:
                             break
-                        min_size_reached = False
+                        # min_size_reached = False
                         max_size_reached = True
+                        break
 
             while True:
-                if (font_size < max_font_size) and (text_width < field_width) and (text_height < field_height):
+                if (
+                    (font_size < max_font_size)
+                    and (text_width < field_width)
+                    and (text_height < field_height)
+                ):
                     font_size = font_size + 1
                 else:
                     break
@@ -183,7 +189,7 @@ class Draw:
                     font_size,
                     text,
                 )
-                
+
         # If the text needs to be inverted (ie. turned upside down), then, it needs to
         # undergo the following steps:
         if text_config.inverted:

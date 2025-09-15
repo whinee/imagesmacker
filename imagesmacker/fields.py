@@ -88,9 +88,9 @@ def relative_field_formatting(  # noqa: C901
                 cell_coords_type = FieldCoords(coords=cell_coords, type=cell_type)
                 op_cell = output.get(cell_name)
                 if op_cell is None:
-                    output[cell_name] = [cell_coords_type] # type: ignore
+                    output[cell_name] = [cell_coords_type]  # type: ignore
                 else:
-                    output[cell_name].append(cell_coords_type) # type: ignore
+                    output[cell_name].append(cell_coords_type)  # type: ignore
             elif isinstance(cell, RelativeContainer):
                 # Push nested job onto stack
                 stack.append(

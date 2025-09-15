@@ -1,7 +1,7 @@
-from typing import Any, Literal, Optional, TypeAlias
+from typing import Any, Literal, TypeAlias
 
 from PIL.ImageDraw import _Ink
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict
 
 TextAnchor: TypeAlias = Literal["lt", "mt", "rt", "lm", "mm", "rm", "lb", "mb", "rb"]
 
@@ -30,7 +30,7 @@ class TextConfig(BaseModel):
 class Code128Config(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    options: Optional[dict[str, Any]] = None
+    options: dict[str, Any] | None = None
     module_width: float = 0.2
     module_height: float = 15
     quiet_zone: int = 1
@@ -43,7 +43,7 @@ class QRCodeConfig(BaseModel):
     error_correction: int = 0
     box_size: int = 20
     border: int = 1
-    mask_pattern: Optional[int] = None
+    mask_pattern: int | None = None
     background_color: str | tuple[int, int, int] = "white"
     foreground_color: str | tuple[int, int, int] = "black"
 
@@ -51,26 +51,15 @@ class QRCodeConfig(BaseModel):
 class BarcodeConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    code128: Optional[Code128Config] = None
-    qr: Optional[QRCodeConfig] = None
+    code128: Code128Config | None = None
+    qr: QRCodeConfig | None = None
 
-
-class ReplaceConfig(BaseModel):
-    regex: bool = False
-    note: str | None = None
-    items: dict[str, list[str]] = Field(default_factory=dict)
-
-class FieldMetadataConfig(BaseModel):
-    model_config = ConfigDict(extra="forbid")
-
-    replace: list[ReplaceConfig] = Field(default_factory=list)
 
 class FieldConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
-    metadata: FieldMetadataConfig = FieldMetadataConfig()
-    text: Optional[TextConfig] = None
-    barcode: Optional[BarcodeConfig] = None
+    text: TextConfig | None = None
+    barcode: BarcodeConfig | None = None
 
 
 def validate_text_anchor(anchor: str):

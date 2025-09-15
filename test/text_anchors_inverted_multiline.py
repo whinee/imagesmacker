@@ -67,7 +67,9 @@ for y_anchor in vertical_anchors:
             inverted=True,
             style=TextStyle(fill="#fff"),
         )
-    data_field_fmt_rows.append(RelativeContainer(fr=1, cells=y_anchor_list, direction="lr"))
+    data_field_fmt_rows.append(
+        RelativeContainer(fr=1, cells=y_anchor_list, direction="lr"),
+    )
 
 data_field_fmt = RelativeDataFieldFormat(cells=data_field_fmt_rows)
 

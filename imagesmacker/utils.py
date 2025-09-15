@@ -1,5 +1,5 @@
 import math
-from typing import Optional, overload
+from typing import overload
 
 from imagesmacker.models.coordinates import WH, XY, XYXY, RectangleCoordinates
 
@@ -31,7 +31,7 @@ def scale_and_center_rect(
 def scale_and_center_rect(
     br_coords: RectangleCoordinates,
     sr_wh: tuple[int, int],
-    angle: Optional[float | int] = None,
+    angle: float | int | None = None,
 ) -> XYXY | tuple[tuple[XY, XY, XY, XY], WH]:
     """
     Given a big rectangle's xyxy and small rectangle's width and height, fit and center the small rectangle in the big rectangle, retaining the small rectangle's aspect ratio. Then, return the xyxy for the small rectangle to make that happen.
