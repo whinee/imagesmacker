@@ -13,4 +13,34 @@
         "pyenv": true,
         // "out": true
     },
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "args": [
+                "--init-file",
+                "/home/lyra/.bashrc"
+            ]
+        },
+        "zsh": {
+            "path": "zsh",
+            "args": [
+                "-c",
+                "ZDOTDIR=$XDG_CONFIG_HOME/zsh/ zsh"
+            ]
+        },
+        "fish": {
+            "path": "fish"
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        },
+        "sh": {
+            "path": "/bin/sh"
+        }
+    },
 }

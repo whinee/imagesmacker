@@ -23,8 +23,9 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 
 - Changed delimiter of data types in `imagesmacker.draw.check_if_type_in_field_attrs` from `:` (colon) to `.` (dot)
 - Changed `imagesmacker.fields.relative_field_formatting` output to allow for cells with the same name
-- Modified `imagesmacker.fields.FieldsCoords` to include `imagesmacker.fields.FieldCoords` in it
+- Changed `imagesmacker.fields.FieldsCoords` to include `imagesmacker.fields.FieldCoords` in it
 - Changed `imagesmacker.draw.Draw.data` parameter `type` to default to `"text"`
+- Changed `imagesmacker.draw.Draw.text` to stop at 20 iterations when resizing font size. "We tried, alright?" 
 
 ### Fixed
 

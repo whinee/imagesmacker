@@ -5,20 +5,20 @@ from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYWH
 from imagesmacker.models.draw import BarcodeConfig, FieldConfig, QRCodeConfig
 
-data = """123456 jump!"""
+data = """https://go.kde.org/endof10"""
 
 image_size = image_width, image_height = (500, 500)
-image = Image.new("RGB", image_size, color="black")
+image = Image.new("RGB", image_size, color="#FCF9DE")
 
 draw = Draw(image)
 
 field_attributes = FieldConfig(
     barcode=BarcodeConfig(
-        qr=QRCodeConfig(),
+        qr=QRCodeConfig(background_color="#FCF9DE"),
     ),
 )
 
-margin = 25
+margin = 0
 margin_x2 = margin * 2
 
 draw.data(

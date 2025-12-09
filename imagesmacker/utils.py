@@ -101,3 +101,53 @@ def scale_and_center_rect(
     rotated_corners_tuple: tuple[XY, XY, XY, XY] = tuple(rotated_corners)  # type: ignore[assignment]
 
     return rotated_corners_tuple, WH(scaled_w, scaled_h)
+
+def parse_color(c: list | tuple | str):  # noqa: C901
+    """
+    Return RGBA tuple.
+    
+    Supports:
+    - (R,G,B) or (R,G,B,A)
+    - "#RRGGBB" or "#RRGGBBAA"
+    - "R,G,B" or "R,G,B,A"
+    """
+    def clamp(x): return max(0, min(255, int(x)))
+
+    if c is None:
+        return (0, 255, 0, 255)
+
+    # tuple/list input
+    if isinstance(c, list | tuple):
+        vals = [clamp(v) for v in c]
+        if len(vals) == 3:
+            vals.append(255)
+        return tuple(vals[:4])
+
+    # string input
+    if isinstance(c, str):
+        s = c.strip()
+
+        # HEX input
+        if s.startswith("#"):
+            s = s[1:]
+            if len(s) == 6:  # RRGGBB
+                r = int(s[0:2], 16)
+                g = int(s[2:4], 16)
+                b = int(s[4:6], 16)
+                return (r, g, b, 255)
+            if len(s) == 8:  # RRGGBBAA
+                r = int(s[0:2], 16)
+                g = int(s[2:4], 16)
+                b = int(s[4:6], 16)
+                a = int(s[6:8], 16)
+                return (r, g, b, a)
+
+        # CSV "R,G,B[,A]"
+        if "," in s:
+            parts = [clamp(p) for p in s.split(",")]
+            if len(parts) == 3:
+                parts.append(0)
+            return tuple(parts[:4])
+
+    # fallback
+    return (0, 255, 0, 255)
