@@ -21,7 +21,7 @@ field_attributes = FieldConfig(
 margin = 0
 margin_x2 = margin * 2
 
-draw.data(
+draw.draw(
     data=data,
     type="barcode.qr",
     field_coords=XYWH(

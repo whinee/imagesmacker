@@ -17,7 +17,10 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 
 ### Added
 
+- Added ability to draw images
 - `imagesmacker.fields.FieldCoords`
+- `imagesmacker.models.coordinates.RectangleCoordinates.fourxy`
+- `imagesmacker.models.coordinates.RectangleCoordinates.wh`
 
 ### Changed
 
@@ -25,7 +28,12 @@ This software uses [Semantic Versioning v2.0.0](https://semver.org/spec/v2.0.0.h
 - Changed `imagesmacker.fields.relative_field_formatting` output to allow for cells with the same name
 - Changed `imagesmacker.fields.FieldsCoords` to include `imagesmacker.fields.FieldCoords` in it
 - Changed `imagesmacker.draw.Draw.data` parameter `type` to default to `"text"`
-- Changed `imagesmacker.draw.Draw.text` to stop at 20 iterations when resizing font size. "We tried, alright?" 
+- Changed `imagesmacker.draw.Draw.text` to stop at 20 iterations when resizing font size. "We tried, alright?"
+- Renamed `imagesmacker.Draw.image` to `imagesmacker.Draw.background_image`
+- Renamed `imagesmacker.Draw.draw` to `imagesmacker.Draw.img_draw`
+- Renamed `imagesmacker.Draw.data` to `imagesmacker.Draw.draw`
+- Renamed `imagesmacker.models.coordinates.RectangleCoordinates.coords` to `imagesmacker.models.coordinates.RectangleCoordinates.coordinates`
+- Renamed `imagesmacker.models.coordinates.RectangleCoordinates.text_coordinates` to `imagesmacker.models.coordinates.RectangleCoordinates.anchor_coordinates`
 
 ### Fixed
 

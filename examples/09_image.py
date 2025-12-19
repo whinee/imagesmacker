@@ -3,9 +3,9 @@ from PIL import Image
 
 from imagesmacker.draw import Draw
 from imagesmacker.models.coordinates import XYWH
-from imagesmacker.models.draw import BarcodeConfig, Code128Config, FieldConfig
+from imagesmacker.models.draw import FieldConfig, ImageConfig
 
-data = """123456 jump!"""
+data = "assets/images/cess/500x500-lyra-cropped.png"
 
 image_size = image_width, image_height = (500, 500)
 image = Image.new("RGB", image_size, color="black")
@@ -13,16 +13,14 @@ image = Image.new("RGB", image_size, color="black")
 draw = Draw(image)
 
 field_attributes = FieldConfig(
-    barcode=BarcodeConfig(
-        code128=Code128Config(),
-    ),
+    image=ImageConfig(),
 )
 
 margin = 25
 margin_x2 = margin * 2
 
 draw.draw(
-    type="barcode.code128",
+    type="image",
     data=data,
     field_coords=XYWH(
         margin,
@@ -33,4 +31,4 @@ draw.draw(
     field_attributes=field_attributes,
 )
 
-image.save(f"{parent_dir_nth_times(__file__, 2)}/docs/examples/Code128.png")
+image.save(f"{parent_dir_nth_times(__file__, 2)}/docs/examples/image-placement.png")

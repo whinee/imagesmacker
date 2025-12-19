@@ -26,7 +26,7 @@ field_attributes = FieldConfig(
 margin = 25
 margin_x2 = margin * 2
 
-draw.data(
+draw.draw(
     type="text",
     data=text,
     field_coords=XYWH(

@@ -1,7 +1,12 @@
 import math
 from typing import overload
 
-from imagesmacker.models.coordinates import WH, XY, XYXY, RectangleCoordinates
+from imagesmacker.models.coordinates import (
+    XYXY,
+    FourXYNamedTuple,
+    RectangleCoordinates,
+    XYNamedTuple,
+)
 
 
 def rect_coords_middle_point(
@@ -24,7 +29,8 @@ def scale_and_center_rect(
     br_coords: RectangleCoordinates,
     sr_wh: tuple[int, int],
     angle: float | int,
-) -> tuple[tuple[XY, XY, XY, XY], WH]:
+) -> FourXYNamedTuple:
+    
     pass
 
 
@@ -32,7 +38,7 @@ def scale_and_center_rect(
     br_coords: RectangleCoordinates,
     sr_wh: tuple[int, int],
     angle: float | int | None = None,
-) -> XYXY | tuple[tuple[XY, XY, XY, XY], WH]:
+) -> XYXY | FourXYNamedTuple:
     """
     Given a big rectangle's xyxy and small rectangle's width and height, fit and center the small rectangle in the big rectangle, retaining the small rectangle's aspect ratio. Then, return the xyxy for the small rectangle to make that happen.
 
@@ -96,22 +102,29 @@ def scale_and_center_rect(
         y_final = cy + y_rotated
 
         # Round the final coordinates to the specified precision
-        rotated_corners.append(XY(int(round(x_final, 0)), int(round(y_final, 0))))
+        rotated_corners.append(
+            XYNamedTuple(x=int(round(x_final, 0)), y=int(round(y_final, 0))),
+        )
 
-    rotated_corners_tuple: tuple[XY, XY, XY, XY] = tuple(rotated_corners)  # type: ignore[assignment]
+    xy1, xy2, xy3, xy4 = rotated_corners
 
-    return rotated_corners_tuple, WH(scaled_w, scaled_h)
+    return FourXYNamedTuple(
+        xy1=xy1, xy2=xy2, xy3=xy3, xy4=xy4,
+    )
+
 
 def parse_color(c: list | tuple | str):  # noqa: C901
     """
     Return RGBA tuple.
-    
+
     Supports:
     - (R,G,B) or (R,G,B,A)
     - "#RRGGBB" or "#RRGGBBAA"
     - "R,G,B" or "R,G,B,A"
     """
-    def clamp(x): return max(0, min(255, int(x)))
+
+    def clamp(x):
+        return max(0, min(255, int(x)))
 
     if c is None:
         return (0, 255, 0, 255)

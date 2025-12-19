@@ -70,6 +70,8 @@ test:
     python examples/05_inverted_multiline_text.py
     python examples/06_QR_code.py
     python examples/07_Code128.py
+    python examples/08_fields.py
+    python examples/09_image.py
 
     python test/text_anchors_inverted_multiline.py
     python test/text_anchors_multiline.py

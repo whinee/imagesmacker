@@ -93,8 +93,8 @@ class Draw:
     """An abstraction of `ImageDraw.Draw` specifically for drawing texts and barcodes in images."""
 
     def __init__(self, image: Image.Image) -> None:
-        self.image = image
-        self.draw = ImageDraw.Draw(image)
+        self.background_image = image
+        self.img_draw = ImageDraw.Draw(image)
 
     def text(  # noqa: C901
         self,
@@ -127,7 +127,7 @@ class Draw:
 
         font_size = max_font_size
 
-        font_size_calculator = FontSizeCalculator(self.draw, text_config.font)
+        font_size_calculator = FontSizeCalculator(self.img_draw, text_config.font)
 
         field_x1, field_y1, field_x2, field_y2 = field_coords.xyxy()
         field_x_coords, field_y, field_width, field_height = field_coords.xywh()
@@ -135,7 +135,7 @@ class Draw:
         # If the text is multiline or is allowed to be broken into multiple lines, then
         # we try to break it into multiple lines so that it can fit into the field
         if ("\n" in text) or text_config.break_text:
-            font_size, text_lines_list, text_height = self.break_text(
+            font_size, text_lines_list, text_height = self._break_text(
                 text=text,
                 text_config=text_config,
                 font_size=font_size,
@@ -148,13 +148,15 @@ class Draw:
             max_size_reached = min_size_reached = False
             iterations = 0
             while True:
-                text_width, text_height = font_size_calculator.get_text_bbox(
-                    font_size,
-                    text,
+                text_width, text_height = (
+                    font_size_calculator.get_multiline_baseline_bbox(
+                        font_size,
+                        text,
+                    )
                 )
 
                 if iterations > 20:
-                    break # hey, we tried
+                    break  # hey, we tried
 
                 if (text_width > field_width) or (text_height > field_height):
                     font_size = font_size // 2
@@ -180,16 +182,22 @@ class Draw:
                 iterations += 1
 
             while True:
-                if (font_size < max_font_size) and (text_width < field_width) and (text_height < field_height):
+                if (
+                    (font_size < max_font_size)
+                    and (text_width < field_width)
+                    and (text_height < field_height)
+                ):
                     font_size = font_size + 1
                 else:
                     break
 
-                text_width, text_height = font_size_calculator.get_text_bbox(
-                    font_size,
-                    text,
+                text_width, text_height = (
+                    font_size_calculator.get_multiline_baseline_bbox(
+                        font_size,
+                        text,
+                    )
                 )
-                
+
         # If the text needs to be inverted (ie. turned upside down), then, it needs to
         # undergo the following steps:
         if text_config.inverted:
@@ -199,7 +207,6 @@ class Draw:
             # # Subtract `hth` to the `text_height` to get the larger half of the text
             # # height. This is for pixel accuracy
             # larger_hth = text_height - halved_text_height
-
             # # field_height += text_height
 
             # Create a new image with the same width and height as the field to draw the
@@ -231,7 +238,7 @@ class Draw:
 
             anchor = horizontal_anchor + vertical_anchor
         else:
-            draw = self.draw
+            draw = self.img_draw
 
         draw_text_common_kwargs: dict[str, Any] = {
             "font": font_loader(
@@ -276,7 +283,7 @@ class Draw:
                         else field_y + field_height - text_height
                     )
 
-            text_x_coords = field_coords.text_coordinates(anchor=anchor)[0]  # type: ignore
+            text_x_coords = field_coords.anchor_coordinates(anchor=anchor)[0]  # type: ignore
 
             if text_config.inverted:
                 text_x_coords -= field_x_coords
@@ -307,14 +314,14 @@ class Draw:
                 #     text_xy[0] + (text_width / 2),
                 #     text_xy[1] + (text_height / 2),
                 # )
-                # self.draw.rectangle(
+                # self.img_draw.rectangle(
                 #     rect_coordinates,
                 #     outline="white",
                 #     width=1,
                 # )
 
             # # WARNING: remove in production
-            # self.draw.rectangle(
+            # self.img_draw.rectangle(
             #     field_coords.xyxy(),
             #     outline="red",
             #     width=1,
@@ -328,19 +335,19 @@ class Draw:
 
             draw.text(
                 text=text,
-                xy=draw_field_coords.text_coordinates(anchor=anchor),  # type: ignore
+                xy=draw_field_coords.anchor_coordinates(anchor=anchor),  # type: ignore
                 **draw_text_common_kwargs,
             )
 
         if text_config.inverted:
             inverted_text_image = inverted_text_image.rotate(180)
-            self.image.paste(
+            self.background_image.paste(
                 inverted_text_image,
                 (field_x1, field_y1, field_x2, field_y2),
                 inverted_text_image,
             )
 
-    def break_text(
+    def _break_text(
         self,
         text: str,
         text_config: TextConfig,
@@ -365,7 +372,7 @@ class Draw:
             # This uses the fact that `(a/(b/c)) = ((a * c)/b)` to simplify the equation
             characters_per_field_width = round(
                 (field_width * max_char_length_in_tlt)
-                / fsc.get_text_bbox(font_size, text)[0],
+                / fsc.get_multiline_baseline_bbox(font_size, text)[0],
             )
 
             # Rewrite the `text_lines_list` to have the longest line of text be
@@ -378,7 +385,7 @@ class Draw:
             # Measure the width and height of each line of text, then appened it
             # to the intialized lists earlier
             for text_line in text_lines_list:
-                text_line_width, text_line_height = fsc.get_text_bbox(
+                text_line_width, text_line_height = fsc.get_multiline_baseline_bbox(
                     font_size,
                     text_line,
                 )
@@ -433,14 +440,39 @@ class Draw:
         barcode_coords = scale_and_center_rect(field_coords, size)
         barcode_wh = barcode_coords.xywh()[2:4]
 
-        self.image.paste(
+        self.background_image.paste(
             barcode.resize(barcode_wh, Image.Resampling.LANCZOS),
             barcode_coords.xyxy(),
         )
 
-    def data(
+    def image(
         self,
-        data: str,
+        image_input: str | Image.Image,
+        field_coords: RectangleCoordinates,
+        field_attributes: FieldConfig,
+    ) -> None:
+
+        match image_input:
+            case str():
+                image_input = Image.open(image_input)
+            case Image.Image():
+                pass
+            case _:
+                raise TypeError("`image_input` must be a str or PIL.Image.Image")
+
+        size: tuple[int, int] = image_input.size
+
+        image_coords = scale_and_center_rect(field_coords, size)
+        image_wh = image_coords.xywh()[2:4]
+
+        self.background_image.paste(
+            image_input.resize(image_wh, Image.Resampling.LANCZOS),
+            image_coords.xyxy(),
+        )
+
+    def draw(
+        self,
+        data: Any,
         field_coords: RectangleCoordinates,
         field_attributes: FieldConfig,
         type: str = "text",
@@ -448,21 +480,15 @@ class Draw:
         fn: Callable[..., None]
         extracted_field_attributes: Any
 
-        # print(data, field_coords, field_attributes, type)
-
         original_type = type
         citifa = check_if_type_in_field_attrs(field_attributes)
         extracted_field_attributes = citifa(type)
 
-        match type:
-            case "text":
-                fn = self.text
-            case _:
-                type, *subtypes = type.split(".")
-                match type:
-                    case "barcode":
-                        fn = self.barcode
-                    case _:
-                        raise DrawDataTypeInvalid(original_type)
+        type, *_ = type.split(".")
+
+        fn = getattr(self, type)
+
+        if fn is None:
+            raise DrawDataTypeInvalid(original_type)
 
         fn(data, field_coords, extracted_field_attributes)

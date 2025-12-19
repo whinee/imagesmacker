@@ -3,7 +3,7 @@ from typing import Any, Literal, TypeAlias
 from PIL.ImageDraw import _Ink
 from pydantic import BaseModel, ConfigDict
 
-TextAnchor: TypeAlias = Literal["lt", "mt", "rt", "lm", "mm", "rm", "lb", "mb", "rb"]
+Anchor: TypeAlias = Literal["lt", "mt", "rt", "lm", "mm", "rm", "lb", "mb", "rb"]
 
 
 class TextStyle(BaseModel):
@@ -20,7 +20,7 @@ class TextConfig(BaseModel):
     font: str
     min_font_size: int = 1
     max_font_size: int = 100
-    anchor: TextAnchor = "mm"
+    anchor: Anchor = "mm"
     break_text: bool = False
     line_height: float | int = 1.2
     inverted: bool = False
@@ -55,11 +55,16 @@ class BarcodeConfig(BaseModel):
     qr: QRCodeConfig | None = None
 
 
+class ImageConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
 class FieldConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     text: TextConfig | None = None
     barcode: BarcodeConfig | None = None
+    image: ImageConfig | None = None
 
 
 def validate_text_anchor(anchor: str):

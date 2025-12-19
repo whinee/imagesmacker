@@ -19,7 +19,7 @@ Items are sorted by priority, with the most important item at the top and least 
 
 ## Temporary
 
-- [ ]
+- [ ] 
 - [ ] Implement binary search fitting multiline text in a box
 - [ ] Font loader thru fc-cache and whatnot
 - [ ] Visual regression testing
